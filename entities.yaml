@@ -12,13 +12,12 @@ apiVersion: backstage.io/v1alpha1
 kind: API
 metadata:
   name: gateway-api
-  annotations:
-    backstage.io/graphql-schema-source: https://gateway-api.test.cergea.com/graphql
 spec:
-  type: http
+  type: graphql-federated-service
   lifecycle: experimental
   owner: backstage-cg
   system: backend-apps
+  definition: graphql
   providesApis: [booking-api]
 ---
 # https://backstage.io/docs/features/software-catalog/descriptor-format#kind-api
