@@ -5,7 +5,7 @@ kind: System
 metadata:
   name: backend-apps
 spec:
-  owner: backstage-cg
+  owner: backend-apps-team
 ---
 # https://backstage.io/docs/features/software-catalog/descriptor-format#kind-component
 apiVersion: backstage.io/v1alpha1
@@ -15,7 +15,7 @@ metadata:
 spec:
   type: graphql
   lifecycle: experimental
-  owner: backstage-cg
+  owner: backend-apps-team
   system: backend-apps
   definition: http
   providesApis: [booking-api]
@@ -28,7 +28,7 @@ metadata:
 spec:
   type: graphql
   lifecycle: experimental
-  owner: backstage-cg
+  owner: backend-apps-team
   system: backend-apps
   definition: http
   subComponentOf: [gateway-api]
