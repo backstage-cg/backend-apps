@@ -12,6 +12,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: gateway-api
+  description: Gateway API for backend apps.
 spec:
   type: service
   lifecycle: experimental
@@ -26,6 +27,7 @@ apiVersion: backstage.io/v1alpha1
 kind: API
 metadata:
   name: booking-api
+  description: GraphQL API for booking.
 spec:
   type: graphql
   lifecycle: experimental
