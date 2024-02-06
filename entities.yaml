@@ -9,11 +9,13 @@ spec:
 ---
 # https://backstage.io/docs/features/software-catalog/descriptor-format#kind-component
 apiVersion: backstage.io/v1alpha1
-kind: Component
+kind: API
 metadata:
   name: gateway-api
+  annotations:
+    backstage.io/graphql-schema-source: https://gateway-api.test.cergea.com/graphql
 spec:
-  type: graphql
+  type: http
   lifecycle: experimental
   owner: backstage-cg
   system: backend-apps
@@ -25,8 +27,9 @@ kind: API
 metadata:
   name: booking-api
 spec:
-  type: graphql
+  type: graphql-federated-service
   lifecycle: experimental
   owner: backstage-cg
   system: backend-apps
   definition: graphql
+  subComponentOf: [gateway-api]
