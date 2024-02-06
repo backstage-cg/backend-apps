@@ -1,0 +1,2758 @@
+interface _Node {
+  _id: ID!
+}
+
+input AcceptInvitationInput {
+  email: String!
+  password: String!
+  inviteToken: String!
+}
+
+type AffiliateProduct {
+  id: ID!
+
+  """The product name"""
+  name: String!
+
+  """Urls for Affiliate Products"""
+  urls: [AffiliateUrls]!
+}
+
+input AffiliateProductInput {
+  name: String!
+  urls: [AffiliateUrlsInput]!
+  type: CatalogueProductType!
+}
+
+type AffiliateUrls {
+  url: String!
+  programme: Programme!
+}
+
+input AffiliateUrlsInput {
+  url: String!
+  programme: Programme!
+}
+
+type Amendment {
+  id: ID!
+  bookingID: ID!
+  actingAccount: String
+  booking: Booking
+  bookedFrom(timezoneType: TimezoneType): String!
+  bookedTo(timezoneType: TimezoneType): String!
+  lastArrival(timezoneType: TimezoneType): String!
+  createdAt: Date!
+  updatedAt: Date!
+  guestAdultCount(value: Int = 1): Int!
+  guestChildrenCount(value: Int = 0): Int!
+  guestInfantCount(value: Int = 0): Int!
+  paymentOption: PaymentOption!
+  price: Int!
+  reference: String!
+  refundStatus: String
+  refundedAt: Date
+  status: AmendmentStatus!
+}
+
+input AmendmentInput {
+  actingAccount: String
+  bookingID: String!
+  bookedFrom: Date!
+  bookedTo: Date!
+  lastArrival: Date
+  guestAdultCount: Int! = 0
+  guestChildrenCount: Int! = 0
+  guestInfantCount: Int! = 0
+}
+
+"""The lifecycle statuses of an amendment"""
+enum AmendmentStatus {
+  CHARGE_COMPLETED
+  CHARGE_FAILED
+  CHARGE_INITIALIZED
+  CONFIRMED
+  FAILED_TO_UPDATE_BOOKING_RECORD
+  INITIALIZED
+  REFUND_FAILED
+  SNAPLOGIC_AMENDMENT_FAILED
+  SNAPLOGIC_DATA_IS_INCORRECT
+}
+
+type AncillaryProduct {
+  id: ID!
+
+  """The product name"""
+  name: String!
+
+  """The outlet associated with the product"""
+  outlet: Outlet
+
+  """The Stripe ID of the product"""
+  ppStripeID: String
+
+  """The relevant Salesforce ID of the product"""
+  salesforceID: String!
+
+  """The product tier for example Gold or Black"""
+  tier: String
+
+  """A list of costs for the product by programme"""
+  costs: [ProductCost]!
+
+  """A list of sale prices for the product by programme"""
+  salePrices: [ProductSalePrice]!
+
+  """The status of the product"""
+  status: ProductStatus!
+}
+
+type Arrival {
+  airport: String
+  terminal: String
+  dateTime: FlightDateTime
+}
+
+"""Represents a binary file in a space. An asset can be any file type."""
+type Asset {
+  sys: Sys!
+  contentfulMetadata: ContentfulMetadata!
+  title(locale: String): String
+  description(locale: String): String
+  contentType(locale: String): String
+  fileName(locale: String): String
+  size(locale: String): Int
+  url(transform: ImageTransformOptions, locale: String): String
+  width(locale: String): Int
+  height(locale: String): Int
+  linkedFrom(allowedLocales: [String]): AssetLinkingCollections
+}
+
+type AssetCollection {
+  total: Int!
+  skip: Int!
+  limit: Int!
+  items: [Asset]!
+}
+
+input AssetFilter {
+  sys: SysFilter
+  contentfulMetadata: ContentfulMetadataFilter
+  title_exists: Boolean
+  title: String
+  title_not: String
+  title_in: [String]
+  title_not_in: [String]
+  title_contains: String
+  title_not_contains: String
+  description_exists: Boolean
+  description: String
+  description_not: String
+  description_in: [String]
+  description_not_in: [String]
+  description_contains: String
+  description_not_contains: String
+  url_exists: Boolean
+  url: String
+  url_not: String
+  url_in: [String]
+  url_not_in: [String]
+  url_contains: String
+  url_not_contains: String
+  size_exists: Boolean
+  size: Int
+  size_not: Int
+  size_in: [Int]
+  size_not_in: [Int]
+  size_gt: Int
+  size_gte: Int
+  size_lt: Int
+  size_lte: Int
+  contentType_exists: Boolean
+  contentType: String
+  contentType_not: String
+  contentType_in: [String]
+  contentType_not_in: [String]
+  contentType_contains: String
+  contentType_not_contains: String
+  fileName_exists: Boolean
+  fileName: String
+  fileName_not: String
+  fileName_in: [String]
+  fileName_not_in: [String]
+  fileName_contains: String
+  fileName_not_contains: String
+  width_exists: Boolean
+  width: Int
+  width_not: Int
+  width_in: [Int]
+  width_not_in: [Int]
+  width_gt: Int
+  width_gte: Int
+  width_lt: Int
+  width_lte: Int
+  height_exists: Boolean
+  height: Int
+  height_not: Int
+  height_in: [Int]
+  height_not_in: [Int]
+  height_gt: Int
+  height_gte: Int
+  height_lt: Int
+  height_lte: Int
+  OR: [AssetFilter]
+  AND: [AssetFilter]
+}
+
+type AssetLinkingCollections {
+  entryCollection(skip: Int = 0, limit: Int = 100, preview: Boolean, locale: String): EntryCollection
+  mediaCollection(skip: Int = 0, limit: Int = 100, preview: Boolean, locale: String): MediaCollection
+  partnerBrandContentCollection(skip: Int = 0, limit: Int = 100, preview: Boolean, locale: String): PartnerBrandContentCollection
+}
+
+enum AssetOrder {
+  url_ASC
+  url_DESC
+  size_ASC
+  size_DESC
+  contentType_ASC
+  contentType_DESC
+  fileName_ASC
+  fileName_DESC
+  width_ASC
+  width_DESC
+  height_ASC
+  height_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+}
+
+type Availability {
+  messageID: String
+  temporaryReservationID: String
+  slots: [Slots!]!
+}
+
+input AvailabilityInput {
+  flightInformation: FlightInformation!
+  guests: Guests!
+  product: LegacyProductInput!
+}
+
+"""
+A record for the sale of a service, this could be either a reservation, walkup or other state.
+"""
+type Booking {
+  id: ID!
+  actingAccount: String
+  consumer: Consumer
+  experience: Experience
+  orderID: String
+  invoice: String
+  stripePaymentID: String
+  price: Float
+  price_currency: String
+  bookedFrom(timezoneType: TimezoneType): String!
+  bookedTo(timezoneType: TimezoneType): String!
+  lastArrival(timezoneType: TimezoneType): String!
+  status: BookingStatus!
+  createdAt: Date!
+  updatedAt: Date!
+  type: BookingType!
+  guestAdultCount(value: Int = 0): Int!
+  guestChildrenCount(value: Int = 0): Int!
+  guestInfantCount(value: Int = 0): Int!
+  metadata: JSONObject
+  reference: String!
+  refundStatus: String
+  refundedAt: Date
+}
+
+input BookingInput {
+  actingAccount: String
+  experience: ExperienceKey!
+  bookedFrom: Date!
+  bookedTo: Date!
+  lastArrival: Date
+  invoice: String
+  stripePaymentID: String
+  type: BookingType!
+  guestAdultCount: Int! = 0
+  guestChildrenCount: Int! = 0
+  guestInfantCount: Int! = 0
+  metadata: JSONObject
+}
+
+"""The lifecycle statuses of a booking"""
+enum BookingStatus {
+  AMENDED
+
+  """A booking has been created, but not yet paid for"""
+  INITIALIZED
+
+  """
+  Booking has been paid for and is now pending confirmation from the operator
+  """
+  PENDING
+  CONFIRMED
+  DECLINED
+
+  """The booking has now been redeemed after being confirmed"""
+  CHECKED_IN
+  COMPLETED_VISIT
+  CANCELLED
+  ERRORED
+  NO_SHOW
+  BOOKED
+  CANCELATION_FAILED
+}
+
+"""The category of booking that has been made."""
+enum BookingType {
+  WALK_UP
+  RESERVATION
+  RESERVATION_FEE_ONLY
+}
+
+enum CatalogueProductType {
+  PRIMARY
+  ANCILLARY
+  AFFILIATE
+}
+
+input cfConditionsNestedFilter {
+  sys: SysFilter
+  contentfulMetadata: ContentfulMetadataFilter
+  legacyConditions_exists: Boolean
+  legacyConditions: String
+  legacyConditions_not: String
+  legacyConditions_in: [String]
+  legacyConditions_not_in: [String]
+  legacyConditions_contains: String
+  legacyConditions_not_contains: String
+  smokingPolicy_exists: Boolean
+  smokingPolicy: String
+  smokingPolicy_not: String
+  smokingPolicy_in: [String]
+  smokingPolicy_not_in: [String]
+  smokingPolicy_contains: String
+  smokingPolicy_not_contains: String
+  dressCode_exists: Boolean
+  dressCode: String
+  dressCode_not: String
+  dressCode_in: [String]
+  dressCode_not_in: [String]
+  dressCode_contains: String
+  dressCode_not_contains: String
+  maxStay_exists: Boolean
+  maxStay: Int
+  maxStay_not: Int
+  maxStay_in: [Int]
+  maxStay_not_in: [Int]
+  maxStay_gt: Int
+  maxStay_gte: Int
+  maxStay_lt: Int
+  maxStay_lte: Int
+  accessPrior_exists: Boolean
+  accessPrior: String
+  accessPrior_not: String
+  accessPrior_in: [String]
+  accessPrior_not_in: [String]
+  accessPrior_contains: String
+  accessPrior_not_contains: String
+  childPolicy_exists: Boolean
+  childPolicy: String
+  childPolicy_not: String
+  childPolicy_in: [String]
+  childPolicy_not_in: [String]
+  childPolicy_contains: String
+  childPolicy_not_contains: String
+  OR: [cfConditionsNestedFilter]
+  AND: [cfConditionsNestedFilter]
+}
+
+input cfFacilitiesNestedFilter {
+  sys: SysFilter
+  contentfulMetadata: ContentfulMetadataFilter
+  airConditioning_exists: Boolean
+  airConditioning: Boolean
+  airConditioning_not: Boolean
+  refreshmentsAlcoholic_exists: Boolean
+  refreshmentsAlcoholic: Boolean
+  refreshmentsAlcoholic_not: Boolean
+  conferenceFacilities_exists: Boolean
+  conferenceFacilities: Boolean
+  conferenceFacilities_not: Boolean
+  disabledAccess_exists: Boolean
+  disabledAccess: Boolean
+  disabledAccess_not: Boolean
+  digitalMembershipCard_exists: Boolean
+  digitalMembershipCard: Boolean
+  digitalMembershipCard_not: Boolean
+  flightInformationMonitor_exists: Boolean
+  flightInformationMonitor: Boolean
+  flightInformationMonitor_not: Boolean
+  internetDataport_exists: Boolean
+  internetDataport: Boolean
+  internetDataport_not: Boolean
+  newspapersMagazines_exists: Boolean
+  newspapersMagazines: Boolean
+  newspapersMagazines_not: Boolean
+  dMcUnavailable_exists: Boolean
+  dMcUnavailable: Boolean
+  dMcUnavailable_not: Boolean
+  noSmoking_exists: Boolean
+  noSmoking: Boolean
+  noSmoking_not: Boolean
+  refreshmentsSoftDrinks_exists: Boolean
+  refreshmentsSoftDrinks: Boolean
+  refreshmentsSoftDrinks_not: Boolean
+  showerFacilities_exists: Boolean
+  showerFacilities: Boolean
+  showerFacilities_not: Boolean
+  telephone_exists: Boolean
+  telephone: Boolean
+  telephone_not: Boolean
+  television_exists: Boolean
+  television: Boolean
+  television_not: Boolean
+  wifi_exists: Boolean
+  wifi: Boolean
+  wifi_not: Boolean
+  checkInFacility_exists: Boolean
+  checkInFacility: Boolean
+  checkInFacility_not: Boolean
+  fastTrackLane_exists: Boolean
+  fastTrackLane: Boolean
+  fastTrackLane_not: Boolean
+  gym_exists: Boolean
+  gym: Boolean
+  gym_not: Boolean
+  sleepRoomQuietArea_exists: Boolean
+  sleepRoomQuietArea: Boolean
+  sleepRoomQuietArea_not: Boolean
+  shoeShine_exists: Boolean
+  shoeShine: Boolean
+  shoeShine_not: Boolean
+  softDrinks_exists: Boolean
+  softDrinks: Boolean
+  softDrinks_not: Boolean
+  alcohol_exists: Boolean
+  alcohol: Boolean
+  alcohol_not: Boolean
+  hotDrinks_exists: Boolean
+  hotDrinks: Boolean
+  hotDrinks_not: Boolean
+  coldBuffet_exists: Boolean
+  coldBuffet: Boolean
+  coldBuffet_not: Boolean
+  hotBuffet_exists: Boolean
+  hotBuffet: Boolean
+  hotBuffet_not: Boolean
+  snacks_exists: Boolean
+  snacks: Boolean
+  snacks_not: Boolean
+  selfService_exists: Boolean
+  selfService: Boolean
+  selfService_not: Boolean
+  tableService_exists: Boolean
+  tableService: Boolean
+  tableService_not: Boolean
+  digitalService_exists: Boolean
+  digitalService: Boolean
+  digitalService_not: Boolean
+  OR: [cfFacilitiesNestedFilter]
+  AND: [cfFacilitiesNestedFilter]
+}
+
+input cfLocationSummaryNestedFilter {
+  sys: SysFilter
+  contentfulMetadata: ContentfulMetadataFilter
+  floorLevel_exists: Boolean
+  floorLevel: Int
+  floorLevel_not: Int
+  floorLevel_in: [Int]
+  floorLevel_not_in: [Int]
+  floorLevel_gt: Int
+  floorLevel_gte: Int
+  floorLevel_lt: Int
+  floorLevel_lte: Int
+  concourse_exists: Boolean
+  concourse: String
+  concourse_not: String
+  concourse_in: [String]
+  concourse_not_in: [String]
+  concourse_contains: String
+  concourse_not_contains: String
+  gps_exists: Boolean
+  gps: String
+  gps_not: String
+  gps_in: [String]
+  gps_not_in: [String]
+  gps_contains: String
+  gps_not_contains: String
+  OR: [cfLocationSummaryNestedFilter]
+  AND: [cfLocationSummaryNestedFilter]
+}
+
+input cfMediaNestedFilter {
+  sys: SysFilter
+  contentfulMetadata: ContentfulMetadataFilter
+  mainImage_exists: Boolean
+  mediaCollection_exists: Boolean
+  OR: [cfMediaNestedFilter]
+  AND: [cfMediaNestedFilter]
+}
+
+"""
+[See type definition](https://app.contentful.com/spaces/687qsr16btly/content_types/conditions)
+"""
+type Conditions implements Entry {
+  sys: Sys!
+  contentfulMetadata: ContentfulMetadata!
+  linkedFrom(allowedLocales: [String]): ConditionsLinkingCollections
+  legacyConditions(locale: String): String
+  smokingPolicy(locale: String): String
+  dressCode(locale: String): String
+  maxStay(locale: String): Int
+  accessPrior(locale: String): String
+  childPolicy(locale: String): String
+}
+
+type ConditionsCollection {
+  total: Int!
+  skip: Int!
+  limit: Int!
+  items: [Conditions]!
+}
+
+input ConditionsFilter {
+  sys: SysFilter
+  contentfulMetadata: ContentfulMetadataFilter
+  legacyConditions_exists: Boolean
+  legacyConditions: String
+  legacyConditions_not: String
+  legacyConditions_in: [String]
+  legacyConditions_not_in: [String]
+  legacyConditions_contains: String
+  legacyConditions_not_contains: String
+  smokingPolicy_exists: Boolean
+  smokingPolicy: String
+  smokingPolicy_not: String
+  smokingPolicy_in: [String]
+  smokingPolicy_not_in: [String]
+  smokingPolicy_contains: String
+  smokingPolicy_not_contains: String
+  dressCode_exists: Boolean
+  dressCode: String
+  dressCode_not: String
+  dressCode_in: [String]
+  dressCode_not_in: [String]
+  dressCode_contains: String
+  dressCode_not_contains: String
+  maxStay_exists: Boolean
+  maxStay: Int
+  maxStay_not: Int
+  maxStay_in: [Int]
+  maxStay_not_in: [Int]
+  maxStay_gt: Int
+  maxStay_gte: Int
+  maxStay_lt: Int
+  maxStay_lte: Int
+  accessPrior_exists: Boolean
+  accessPrior: String
+  accessPrior_not: String
+  accessPrior_in: [String]
+  accessPrior_not_in: [String]
+  accessPrior_contains: String
+  accessPrior_not_contains: String
+  childPolicy_exists: Boolean
+  childPolicy: String
+  childPolicy_not: String
+  childPolicy_in: [String]
+  childPolicy_not_in: [String]
+  childPolicy_contains: String
+  childPolicy_not_contains: String
+  OR: [ConditionsFilter]
+  AND: [ConditionsFilter]
+}
+
+type ConditionsLinkingCollections {
+  entryCollection(skip: Int = 0, limit: Int = 100, preview: Boolean, locale: String): EntryCollection
+  outletContentCollection(skip: Int = 0, limit: Int = 100, preview: Boolean, locale: String, order: [ConditionsLinkingCollectionsOutletContentCollectionOrder]): OutletContentCollection
+}
+
+enum ConditionsLinkingCollectionsOutletContentCollectionOrder {
+  name_ASC
+  name_DESC
+  legacyCode_ASC
+  legacyCode_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+}
+
+enum ConditionsOrder {
+  smokingPolicy_ASC
+  smokingPolicy_DESC
+  dressCode_ASC
+  dressCode_DESC
+  maxStay_ASC
+  maxStay_DESC
+  accessPrior_ASC
+  accessPrior_DESC
+  childPolicy_ASC
+  childPolicy_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+}
+
+"""
+A consumer is the end user of our applications that consume our goods and services
+"""
+type Consumer {
+  id: ID!
+  bookings: [Booking!]!
+  fullName: String
+  firstName: String
+  lastName: String
+
+  """Consumers preferred langauge"""
+  locale: String
+  dateOfBirth: Date
+
+  """Current a mandatory field as we use email as our primary login method"""
+  emailAddress: String!
+  phone: String
+
+  """
+  In salesforce we have a record of our consumer to manage their lifecycle and manage marketing
+  """
+  crmId: String
+  linkedAccounts: [LinkedAccount!]!
+  mobileAppsData: [MobileAppData]
+  createdAt: Date!
+  updatedAt: Date!
+  entitlements: [Entitlement!]!
+}
+
+input ConsumerInput {
+  emailAddress: String!
+  firstName: String
+  lastName: String
+  locale: String
+  phone: String
+  dateOfBirth: Date
+  marketingConsent: Boolean
+}
+
+type ContentfulMetadata {
+  tags: [ContentfulTag]!
+}
+
+input ContentfulMetadataFilter {
+  tags_exists: Boolean
+  tags: ContentfulMetadataTagsFilter
+}
+
+input ContentfulMetadataTagsFilter {
+  id_contains_all: [String]
+  id_contains_some: [String]
+  id_contains_none: [String]
+}
+
+"""
+Represents a tag entity for finding and organizing content easily.
+    Find out more here: https://www.contentful.com/developers/docs/references/content-delivery-api/#/reference/content-tags
+"""
+type ContentfulTag {
+  id: String
+  name: String
+}
+
+scalar Date
+
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z,
+    compliant with the 'date-time' format outlined in section 5.6 of
+    the RFC 3339 profile of the ISO 8601 standard for representation
+    of dates and times using the Gregorian calendar.
+"""
+scalar DateTime
+
+type DaySchedules {
+  FRIDAY: [Schedule]
+  MONDAY: [Schedule]
+  SATURDAY: [Schedule]
+  SUNDAY: [Schedule]
+  THURSDAY: [Schedule]
+  TUESDAY: [Schedule]
+  WEDNESDAY: [Schedule]
+}
+
+input DaySchedulesInput {
+  FRIDAY: [ScheduleInput]
+  MONDAY: [ScheduleInput]
+  SATURDAY: [ScheduleInput]
+  SUNDAY: [ScheduleInput]
+  THURSDAY: [ScheduleInput]
+  TUESDAY: [ScheduleInput]
+  WEDNESDAY: [ScheduleInput]
+}
+
+type Departure {
+  airport: String
+  terminal: String
+  dateTime: FlightDateTime
+}
+
+"""
+The 'Dimension' type represents dimensions as whole numeric values between `1` and `4000`.
+"""
+scalar Dimension
+
+type Editor {
+  """The editor's first name"""
+  firstName: String
+
+  """The editor's last name"""
+  lastName: String
+
+  """The editor's organisation"""
+  organisation: String
+}
+
+input EditorInput {
+  """The editor's first name"""
+  firstName: String
+
+  """The editor's last name"""
+  lastName: String
+
+  """The editor's organisation"""
+  organisation: String
+}
+
+type Entitlement {
+  id: ID!
+  createdAt: Date!
+  updatedAt: Date!
+  consumer: Consumer
+  issueDate: Date!
+  expiryDate: Date!
+  expired: Boolean!
+  redeemed: Boolean!
+  redeemableProducts: [EntitlementProductType]!
+  redemptionDate: Date
+  redeemedProduct: EntitlementProductType
+}
+
+input EntitlementInput {
+  consumerID: String!
+  externalID: String!
+  issueDate: Date
+  expiryDate: Date!
+  redeemed: Boolean
+  redeemableProducts: [EntitlementProductType]!
+  redemptionDate: Date
+  redeemedProduct: EntitlementProductType
+}
+
+enum EntitlementProductType {
+  LOUNGE
+}
+
+interface Entry {
+  sys: Sys!
+  contentfulMetadata: ContentfulMetadata!
+}
+
+type EntryCollection {
+  total: Int!
+  skip: Int!
+  limit: Int!
+  items: [Entry]!
+}
+
+input EntryFilter {
+  sys: SysFilter
+  contentfulMetadata: ContentfulMetadataFilter
+  OR: [EntryFilter]
+  AND: [EntryFilter]
+}
+
+enum EntryOrder {
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+}
+
+type Experience {
+  id: ID!
+  bookings: [Booking!]!
+  invitations: [Invitation!]!
+  partners: [Partner!]!
+  experience: ExperienceCategory
+  loungeCode: String
+  accessPeriod: String
+  msDynamicsUID: String
+  serviceCentre: String
+  loungeName: String
+  location: LegacyLocation
+  pricing: LegacyPricing
+  ppboOperatorName: String
+  passengerType: String
+  airsideLandside: String
+  underNotice: Boolean
+  exitDateIfUnderNotice: Date
+  reservationRequestEmail: String
+  hasActiveLounges: Boolean
+  isDeleted: Boolean
+  facilities: [String]
+  videos: [String]
+  images: [Image]
+  additionalInformation: String
+  conditions: String
+  directions: String
+  openingHours: String
+  marketingCopy: String
+  uniqueValueKey: String
+  redemption: Redemption
+  loungeOffers: [String]
+  walkUpStripeProductID: String
+  reservationStripeProductID: String
+  reservationOnlyFeeStripeProductID: String
+  partnerIntegrationId: String
+  partnerIdTest: String
+  partnerIdProd: String
+  pP: Boolean
+  lK: Boolean
+  cergea: Boolean
+}
+
+enum ExperienceCategory {
+  AIRPORT_EXPERIENCE
+}
+
+input ExperienceKey {
+  id: ID!
+}
+
+enum ExperienceType {
+  LOUNGE
+}
+
+"""
+[See type definition](https://app.contentful.com/spaces/687qsr16btly/content_types/facilities)
+"""
+type Facilities implements Entry {
+  sys: Sys!
+  contentfulMetadata: ContentfulMetadata!
+  linkedFrom(allowedLocales: [String]): FacilitiesLinkingCollections
+  airConditioning(locale: String): Boolean
+  refreshmentsAlcoholic(locale: String): Boolean
+  conferenceFacilities(locale: String): Boolean
+  disabledAccess(locale: String): Boolean
+  digitalMembershipCard(locale: String): Boolean
+  flightInformationMonitor(locale: String): Boolean
+  internetDataport(locale: String): Boolean
+  newspapersMagazines(locale: String): Boolean
+  dMcUnavailable(locale: String): Boolean
+  noSmoking(locale: String): Boolean
+  refreshmentsSoftDrinks(locale: String): Boolean
+  showerFacilities(locale: String): Boolean
+  telephone(locale: String): Boolean
+  television(locale: String): Boolean
+  wifi(locale: String): Boolean
+  checkInFacility(locale: String): Boolean
+  fastTrackLane(locale: String): Boolean
+  gym(locale: String): Boolean
+  sleepRoomQuietArea(locale: String): Boolean
+  shoeShine(locale: String): Boolean
+  softDrinks(locale: String): Boolean
+  alcohol(locale: String): Boolean
+  hotDrinks(locale: String): Boolean
+  coldBuffet(locale: String): Boolean
+  hotBuffet(locale: String): Boolean
+  snacks(locale: String): Boolean
+  selfService(locale: String): Boolean
+  tableService(locale: String): Boolean
+  digitalService(locale: String): Boolean
+}
+
+type FacilitiesCollection {
+  total: Int!
+  skip: Int!
+  limit: Int!
+  items: [Facilities]!
+}
+
+input FacilitiesFilter {
+  sys: SysFilter
+  contentfulMetadata: ContentfulMetadataFilter
+  airConditioning_exists: Boolean
+  airConditioning: Boolean
+  airConditioning_not: Boolean
+  refreshmentsAlcoholic_exists: Boolean
+  refreshmentsAlcoholic: Boolean
+  refreshmentsAlcoholic_not: Boolean
+  conferenceFacilities_exists: Boolean
+  conferenceFacilities: Boolean
+  conferenceFacilities_not: Boolean
+  disabledAccess_exists: Boolean
+  disabledAccess: Boolean
+  disabledAccess_not: Boolean
+  digitalMembershipCard_exists: Boolean
+  digitalMembershipCard: Boolean
+  digitalMembershipCard_not: Boolean
+  flightInformationMonitor_exists: Boolean
+  flightInformationMonitor: Boolean
+  flightInformationMonitor_not: Boolean
+  internetDataport_exists: Boolean
+  internetDataport: Boolean
+  internetDataport_not: Boolean
+  newspapersMagazines_exists: Boolean
+  newspapersMagazines: Boolean
+  newspapersMagazines_not: Boolean
+  dMcUnavailable_exists: Boolean
+  dMcUnavailable: Boolean
+  dMcUnavailable_not: Boolean
+  noSmoking_exists: Boolean
+  noSmoking: Boolean
+  noSmoking_not: Boolean
+  refreshmentsSoftDrinks_exists: Boolean
+  refreshmentsSoftDrinks: Boolean
+  refreshmentsSoftDrinks_not: Boolean
+  showerFacilities_exists: Boolean
+  showerFacilities: Boolean
+  showerFacilities_not: Boolean
+  telephone_exists: Boolean
+  telephone: Boolean
+  telephone_not: Boolean
+  television_exists: Boolean
+  television: Boolean
+  television_not: Boolean
+  wifi_exists: Boolean
+  wifi: Boolean
+  wifi_not: Boolean
+  checkInFacility_exists: Boolean
+  checkInFacility: Boolean
+  checkInFacility_not: Boolean
+  fastTrackLane_exists: Boolean
+  fastTrackLane: Boolean
+  fastTrackLane_not: Boolean
+  gym_exists: Boolean
+  gym: Boolean
+  gym_not: Boolean
+  sleepRoomQuietArea_exists: Boolean
+  sleepRoomQuietArea: Boolean
+  sleepRoomQuietArea_not: Boolean
+  shoeShine_exists: Boolean
+  shoeShine: Boolean
+  shoeShine_not: Boolean
+  softDrinks_exists: Boolean
+  softDrinks: Boolean
+  softDrinks_not: Boolean
+  alcohol_exists: Boolean
+  alcohol: Boolean
+  alcohol_not: Boolean
+  hotDrinks_exists: Boolean
+  hotDrinks: Boolean
+  hotDrinks_not: Boolean
+  coldBuffet_exists: Boolean
+  coldBuffet: Boolean
+  coldBuffet_not: Boolean
+  hotBuffet_exists: Boolean
+  hotBuffet: Boolean
+  hotBuffet_not: Boolean
+  snacks_exists: Boolean
+  snacks: Boolean
+  snacks_not: Boolean
+  selfService_exists: Boolean
+  selfService: Boolean
+  selfService_not: Boolean
+  tableService_exists: Boolean
+  tableService: Boolean
+  tableService_not: Boolean
+  digitalService_exists: Boolean
+  digitalService: Boolean
+  digitalService_not: Boolean
+  OR: [FacilitiesFilter]
+  AND: [FacilitiesFilter]
+}
+
+type FacilitiesLinkingCollections {
+  entryCollection(skip: Int = 0, limit: Int = 100, preview: Boolean, locale: String): EntryCollection
+  outletContentCollection(skip: Int = 0, limit: Int = 100, preview: Boolean, locale: String, order: [FacilitiesLinkingCollectionsOutletContentCollectionOrder]): OutletContentCollection
+}
+
+enum FacilitiesLinkingCollectionsOutletContentCollectionOrder {
+  name_ASC
+  name_DESC
+  legacyCode_ASC
+  legacyCode_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+}
+
+enum FacilitiesOrder {
+  airConditioning_ASC
+  airConditioning_DESC
+  refreshmentsAlcoholic_ASC
+  refreshmentsAlcoholic_DESC
+  conferenceFacilities_ASC
+  conferenceFacilities_DESC
+  disabledAccess_ASC
+  disabledAccess_DESC
+  digitalMembershipCard_ASC
+  digitalMembershipCard_DESC
+  flightInformationMonitor_ASC
+  flightInformationMonitor_DESC
+  internetDataport_ASC
+  internetDataport_DESC
+  newspapersMagazines_ASC
+  newspapersMagazines_DESC
+  dMcUnavailable_ASC
+  dMcUnavailable_DESC
+  noSmoking_ASC
+  noSmoking_DESC
+  refreshmentsSoftDrinks_ASC
+  refreshmentsSoftDrinks_DESC
+  showerFacilities_ASC
+  showerFacilities_DESC
+  telephone_ASC
+  telephone_DESC
+  television_ASC
+  television_DESC
+  wifi_ASC
+  wifi_DESC
+  checkInFacility_ASC
+  checkInFacility_DESC
+  fastTrackLane_ASC
+  fastTrackLane_DESC
+  gym_ASC
+  gym_DESC
+  sleepRoomQuietArea_ASC
+  sleepRoomQuietArea_DESC
+  shoeShine_ASC
+  shoeShine_DESC
+  softDrinks_ASC
+  softDrinks_DESC
+  alcohol_ASC
+  alcohol_DESC
+  hotDrinks_ASC
+  hotDrinks_DESC
+  coldBuffet_ASC
+  coldBuffet_DESC
+  hotBuffet_ASC
+  hotBuffet_DESC
+  snacks_ASC
+  snacks_DESC
+  selfService_ASC
+  selfService_DESC
+  tableService_ASC
+  tableService_DESC
+  digitalService_ASC
+  digitalService_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+}
+
+type FlightDateTime {
+  local: String
+  utc: String
+}
+
+type FlightDetails {
+  departure: Departure
+  arrival: Arrival
+}
+
+input FlightDetailsInput {
+  flightNumber: String!
+  departureDate: Date!
+  carrierCode: String!
+  codeType: String!
+  version: String!
+}
+
+input FlightInformation {
+  type: String!
+  dateTime: Date!
+  airport: String
+  terminal: String!
+}
+
+type GeoJSON {
+  type: String!
+  coordinates: [[[Float!]!]!]!
+}
+
+input GeoJSONInput {
+  type: String!
+  coordinates: [[[Float!]!]!]!
+}
+
+type Geoloc {
+  lng: Float
+  lat: Float
+}
+
+input GeoQueryInput {
+  lng: Float
+  lat: Float
+}
+
+input GetEntitlementsFilter {
+  consumerID: String
+  expired: Boolean
+  redeemed: Boolean
+  redeemableProducts: EntitlementProductType
+  redeemedProduct: EntitlementProductType
+}
+
+input Guests {
+  adultCount: Int! = 0
+  childrenCount: Int! = 0
+  infantCount: Int! = 0
+}
+
+"""The 'HexColor' type represents color in `rgb:ffffff` string format."""
+scalar HexColor
+
+type Image {
+  id: ID!
+  url: String
+  altText: String
+  width: Int
+  height: Int
+  contentType: String
+  lastModified: Date
+}
+
+enum ImageFormat {
+  """JPG image format."""
+  JPG
+
+  """
+  Progressive JPG format stores multiple passes of an image in progressively higher detail.
+          When a progressive image is loading, the viewer will first see a lower quality pixelated version which
+          will gradually improve in detail, until the image is fully downloaded. This is to display an image as
+          early as possible to make the layout look as designed.
+  """
+  JPG_PROGRESSIVE
+
+  """PNG image format"""
+  PNG
+
+  """
+  8-bit PNG images support up to 256 colors and weigh less than the standard 24-bit PNG equivalent.
+          The 8-bit PNG format is mostly used for simple images, such as icons or logos.
+  """
+  PNG8
+
+  """WebP image format."""
+  WEBP
+  AVIF
+}
+
+enum ImageResizeFocus {
+  """Focus the resizing on the center."""
+  CENTER
+
+  """Focus the resizing on the top."""
+  TOP
+
+  """Focus the resizing on the top right."""
+  TOP_RIGHT
+
+  """Focus the resizing on the right."""
+  RIGHT
+
+  """Focus the resizing on the bottom right."""
+  BOTTOM_RIGHT
+
+  """Focus the resizing on the bottom."""
+  BOTTOM
+
+  """Focus the resizing on the bottom left."""
+  BOTTOM_LEFT
+
+  """Focus the resizing on the left."""
+  LEFT
+
+  """Focus the resizing on the top left."""
+  TOP_LEFT
+
+  """Focus the resizing on the largest face."""
+  FACE
+
+  """Focus the resizing on the area containing all the faces."""
+  FACES
+}
+
+enum ImageResizeStrategy {
+  """Resizes the image to fit into the specified dimensions."""
+  FIT
+
+  """
+  Resizes the image to the specified dimensions, padding the image if needed.
+          Uses desired background color as padding color.
+  """
+  PAD
+
+  """
+  Resizes the image to the specified dimensions, cropping the image if needed.
+  """
+  FILL
+
+  """
+  Resizes the image to the specified dimensions, changing the original aspect ratio if needed.
+  """
+  SCALE
+
+  """
+  Crops a part of the original image to fit into the specified dimensions.
+  """
+  CROP
+
+  """Creates a thumbnail from the image."""
+  THUMB
+}
+
+input ImageTransformOptions {
+  """Desired width in pixels. Defaults to the original image width."""
+  width: Dimension
+
+  """Desired height in pixels. Defaults to the original image height."""
+  height: Dimension
+
+  """
+  Desired quality of the image in percents.
+          Used for `PNG8`, `JPG`, `JPG_PROGRESSIVE` and `WEBP` formats.
+  """
+  quality: Quality
+
+  """
+  Desired corner radius in pixels.
+          Results in an image with rounded corners (pass `-1` for a full circle/ellipse).
+          Defaults to `0`. Uses desired background color as padding color,
+          unless the format is `JPG` or `JPG_PROGRESSIVE` and resize strategy is `PAD`, then defaults to white.
+  """
+  cornerRadius: Int
+
+  """Desired resize strategy. Defaults to `FIT`."""
+  resizeStrategy: ImageResizeStrategy
+
+  """Desired resize focus area. Defaults to `CENTER`."""
+  resizeFocus: ImageResizeFocus
+
+  """
+  Desired background color, used with corner radius or `PAD` resize strategy.
+          Defaults to transparent (for `PNG`, `PNG8` and `WEBP`) or white (for `JPG` and `JPG_PROGRESSIVE`).
+  """
+  backgroundColor: HexColor
+
+  """Desired image format. Defaults to the original image format."""
+  format: ImageFormat
+}
+
+"""
+This allows us to send invitations for access, currently creating a partner account and linking it to an experience
+"""
+type Invitation {
+  id: ID!
+  experience: Experience
+  inviteeEmail: String!
+  expiresAt: Date!
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+input InvitationInput {
+  inviteeEmail: String!
+  userType: InvitationUserType!
+  experience: ExperienceKey
+}
+
+"""The types of user invitation that can be sent"""
+enum InvitationUserType {
+  """An operator who can see the details for a single experience"""
+  PARTNER
+
+  """An admin user that has access to all experiences and full permissions"""
+  SUPER_USER
+}
+
+enum ISOCountryCode {
+  ABW
+  AFG
+  AGO
+  AIA
+  ALA
+  ALB
+  AND
+  ANT
+  ARE
+  ARG
+  ARM
+  ASM
+  ATA
+  ATF
+  ATG
+  AUS
+  AUT
+  AZE
+  BDI
+  BEL
+  BEN
+  BES
+  BFA
+  BGD
+  BGR
+  BHR
+  BHS
+  BIH
+  BLM
+  BLR
+  BLZ
+  BMU
+  BOL
+  BRA
+  BRB
+  BRN
+  BTN
+  BVT
+  BWA
+  CAF
+  CAN
+  CCK
+  CHE
+  CHL
+  CHN
+  CIV
+  CMR
+  COD
+  COG
+  COK
+  COL
+  COM
+  CPV
+  CRI
+  CUB
+  CUW
+  CXR
+  CYM
+  CYP
+  CZE
+  DEU
+  DJI
+  DMA
+  DNK
+  DOM
+  DZA
+  ECU
+  EGY
+  ERI
+  ESH
+  ESP
+  EST
+  ETH
+  FIN
+  FJI
+  FLK
+  FRA
+  FRO
+  FSM
+  GAB
+  GBR
+  GEO
+  GGY
+  GHA
+  GIB
+  GIN
+  GLP
+  GMB
+  GNB
+  GNQ
+  GRC
+  GRD
+  GRL
+  GTM
+  GUF
+  GUM
+  GUY
+  HKG
+  HMD
+  HND
+  HRV
+  HTI
+  HUN
+  IDN
+  IMN
+  IND
+  IOT
+  IRL
+  IRN
+  IRQ
+  ISL
+  ISR
+  ITA
+  JAM
+  JEY
+  JOR
+  JPN
+  KAZ
+  KEN
+  KGZ
+  KHM
+  KIR
+  KNA
+  KOR
+  KWT
+  LAO
+  LBN
+  LBR
+  LBY
+  LCA
+  LIE
+  LKA
+  LSO
+  LTU
+  LUX
+  LVA
+  MAC
+  MAF
+  MAR
+  MCO
+  MDA
+  MDG
+  MDV
+  MEX
+  MHL
+  MKD
+  MLI
+  MLT
+  MMR
+  MNE
+  MNG
+  MNP
+  MOZ
+  MRT
+  MSR
+  MTQ
+  MUS
+  MWI
+  MYS
+  MYT
+  NAM
+  NCL
+  NER
+  NFK
+  NGA
+  NIC
+  NIU
+  NLD
+  NOR
+  NPL
+  NRU
+  NZL
+  OMN
+  PAK
+  PAN
+  PCN
+  PER
+  PHL
+  PLW
+  PNG
+  POL
+  PRI
+  PRK
+  PRT
+  PRY
+  PSE
+  PYF
+  QAT
+  REU
+  ROU
+  RUS
+  RWA
+  SAU
+  SDN
+  SEN
+  SGP
+  SGS
+  SHN
+  SJM
+  SLE
+  SLB
+  SLV
+  SMR
+  SOM
+  SPM
+  SRB
+  SSD
+  STP
+  SUR
+  SVK
+  SVN
+  SWE
+  SWZ
+  SXM
+  SYC
+  SYR
+  TCA
+  TCD
+  TGO
+  THA
+  TJK
+  TKL
+  TKM
+  TLS
+  TON
+  TTO
+  TUN
+  TUR
+  TUV
+  TWN
+  TZA
+  UGA
+  UKR
+  UMI
+  URY
+  USA
+  UZB
+  VAT
+  VCT
+  VEN
+  VGB
+  VIR
+  VNM
+  VUT
+  WLF
+  WSM
+  YEM
+  ZAF
+  ZMB
+  ZWE
+}
+
+scalar JSONObject
+
+type LegacyLocation {
+  airportCode: String
+  airportName: String
+  terminal: String
+  city: String
+  country: String
+  region: String
+  lbCountryCode: String
+  isoCountryCode: String
+  terminalAccessibility: String
+  terminalCode: String
+  cgTerminalCode: String
+  cgTerminal: String
+  _geoloc: Geoloc
+  timezone: String
+}
+
+type LegacyPricing {
+  pricingType: String
+  currency: String
+  reservationCost: Float
+  lifestyleXReservationCharge: Float
+  walkInCostCurrentPPRate: Float
+  lifestyleXWalkInCharge: Float
+  vat: Int
+  reservationOnlyFee: Float
+  reservationOnlyFeeCost: Float
+}
+
+input LegacyProductInput {
+  productType: ProductType
+  productID: String!
+  supplierCode: String!
+}
+
+"""
+A linked account is another account (typically external) that can be associated to the internal cergea consumer
+"""
+type LinkedAccount {
+  id: ID!
+  externalID: String!
+  consumer: Consumer!
+  provider: LinkedAccountProvider!
+  membershipID: String
+  membershipType: String!
+  analytics: JSONObject
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+input LinkedAccountInput {
+  token: String!
+  analytics: JSONObject
+}
+
+enum LinkedAccountProvider {
+  PRIORITY_PASS
+  LOUNGE_KEY
+}
+
+type Location {
+  """The country name"""
+  country: String!
+
+  """The ISO country code"""
+  isoCountryCode: ISOCountryCode
+
+  """The city"""
+  city: String
+
+  """The 3 character location code eg RMF"""
+  code: String
+
+  """Whether the location is airside or landside"""
+  landside: Boolean
+
+  """The name of the location"""
+  name: String
+
+  """The terminal of the location"""
+  terminal: String
+
+  """
+  An open standard file format used for representing geographical features and their attributes
+  """
+  geoJSON: GeoJSON
+
+  """Metadata about editor and last edited"""
+  meta: Meta
+}
+
+input LocationInput {
+  """The country name"""
+  country: String!
+
+  """The ISO country code"""
+  isoCountryCode: ISOCountryCode
+
+  """The city"""
+  city: String
+
+  """The 3 character location code eg RMF"""
+  code: String
+
+  """Whether the location is airside or landside"""
+  landside: Boolean
+
+  """The name of the location"""
+  name: String
+
+  """The terminal of the location"""
+  terminal: String
+
+  """
+  An open standard file format used for representing geographical features and their attributes
+  """
+  geoJSON: GeoJSONInput
+
+  """Metadata about editor and last edited"""
+  meta: MetaInput
+}
+
+"""
+[See type definition](https://app.contentful.com/spaces/687qsr16btly/content_types/locationSummary)
+"""
+type LocationSummary implements Entry {
+  sys: Sys!
+  contentfulMetadata: ContentfulMetadata!
+  linkedFrom(allowedLocales: [String]): LocationSummaryLinkingCollections
+  floorLevel(locale: String): Int
+  concourse(locale: String): String
+  gps(locale: String): String
+}
+
+type LocationSummaryCollection {
+  total: Int!
+  skip: Int!
+  limit: Int!
+  items: [LocationSummary]!
+}
+
+input LocationSummaryFilter {
+  sys: SysFilter
+  contentfulMetadata: ContentfulMetadataFilter
+  floorLevel_exists: Boolean
+  floorLevel: Int
+  floorLevel_not: Int
+  floorLevel_in: [Int]
+  floorLevel_not_in: [Int]
+  floorLevel_gt: Int
+  floorLevel_gte: Int
+  floorLevel_lt: Int
+  floorLevel_lte: Int
+  concourse_exists: Boolean
+  concourse: String
+  concourse_not: String
+  concourse_in: [String]
+  concourse_not_in: [String]
+  concourse_contains: String
+  concourse_not_contains: String
+  gps_exists: Boolean
+  gps: String
+  gps_not: String
+  gps_in: [String]
+  gps_not_in: [String]
+  gps_contains: String
+  gps_not_contains: String
+  OR: [LocationSummaryFilter]
+  AND: [LocationSummaryFilter]
+}
+
+type LocationSummaryLinkingCollections {
+  entryCollection(skip: Int = 0, limit: Int = 100, preview: Boolean, locale: String): EntryCollection
+  outletContentCollection(skip: Int = 0, limit: Int = 100, preview: Boolean, locale: String, order: [LocationSummaryLinkingCollectionsOutletContentCollectionOrder]): OutletContentCollection
+}
+
+enum LocationSummaryLinkingCollectionsOutletContentCollectionOrder {
+  name_ASC
+  name_DESC
+  legacyCode_ASC
+  legacyCode_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+}
+
+enum LocationSummaryOrder {
+  floorLevel_ASC
+  floorLevel_DESC
+  concourse_ASC
+  concourse_DESC
+  gps_ASC
+  gps_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+}
+
+"""
+[See type definition](https://app.contentful.com/spaces/687qsr16btly/content_types/media)
+"""
+type Media implements Entry {
+  sys: Sys!
+  contentfulMetadata: ContentfulMetadata!
+  linkedFrom(allowedLocales: [String]): MediaLinkingCollections
+  mainImage(preview: Boolean, locale: String): Asset
+  mediaCollection(skip: Int = 0, limit: Int = 100, preview: Boolean, locale: String): AssetCollection
+}
+
+type MediaCollection {
+  total: Int!
+  skip: Int!
+  limit: Int!
+  items: [Media]!
+}
+
+input MediaFilter {
+  sys: SysFilter
+  contentfulMetadata: ContentfulMetadataFilter
+  mainImage_exists: Boolean
+  mediaCollection_exists: Boolean
+  OR: [MediaFilter]
+  AND: [MediaFilter]
+}
+
+type MediaLinkingCollections {
+  entryCollection(skip: Int = 0, limit: Int = 100, preview: Boolean, locale: String): EntryCollection
+  outletContentCollection(skip: Int = 0, limit: Int = 100, preview: Boolean, locale: String, order: [MediaLinkingCollectionsOutletContentCollectionOrder]): OutletContentCollection
+}
+
+enum MediaLinkingCollectionsOutletContentCollectionOrder {
+  name_ASC
+  name_DESC
+  legacyCode_ASC
+  legacyCode_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+}
+
+enum MediaOrder {
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+}
+
+type MembershipPlan {
+  id: ID!
+  dealName: String
+  description: String
+  externalID: String
+  createdAt: Date!
+  updatedAt: Date!
+  startDate: Date!
+  endDate: Date!
+}
+
+input MembershipPlanInput {
+  externalID: String
+  dealName: String
+  description: String
+  startDate: Date!
+  endDate: Date!
+}
+
+type Meta {
+  """The editor who last edited the object"""
+  editor: Editor
+
+  """The date the object was last edited"""
+  lastEdited: Date
+}
+
+input MetaInput {
+  """The editor who last edited the object"""
+  editor: EditorInput
+}
+
+"""
+Mobile app data stores data about an instance of mobile app used by consumer. A consumer can have multiple app instances.
+"""
+type MobileAppData {
+  id: ID!
+  appId: String!
+  consumer: Consumer!
+  pushNotificationId: String
+  os: String!
+  osVersion: String
+  deviceMaker: String
+  deviceModel: String
+  appVersion: String!
+  appName: String!
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+input MobileAppDataInput {
+  appId: String!
+  pushNotificationId: String
+  os: String
+  osVersion: String
+  deviceMaker: String
+  deviceModel: String
+  appVersion: String
+  appName: String
+}
+
+type Mutation {
+  createBooking(bookingInput: BookingInput): Booking
+  confirmAmendment(amendmentInput: AmendmentInput): Amendment
+  deleteBooking(id: ID!): Booking
+  confirmBooking(id: ID!): Booking
+  noShowBooking(id: ID!): Booking
+  payForBooking(id: ID!, paymentInput: PaymentInput): Booking
+  declineBooking(id: ID!): Booking
+  checkinBooking(id: ID!): Booking
+  cancelBooking(id: ID!): Booking
+  createProduct(productInput: ProductInput): Product
+  updateProduct(id: ID!, productInput: ProductInput): Product
+  deleteProduct(id: ID!): Product
+  createAffiliateProduct(productInput: AffiliateProductInput): AffiliateProduct
+  updateAffiliateProduct(id: ID!, productInput: AffiliateProductInput): AffiliateProduct
+  createOutlet(outletInput: OutletInput): Outlet
+  updateOutlet(id: ID!, outletInput: OutletInput): Outlet
+  deleteOutlet(id: ID!): Outlet
+  addProductCategoryToOutlet(id: ID!, category: ProductCategory!): Outlet
+  createPartnerBrand(partnerBrandInput: PartnerBrandInput): PartnerBrand
+  updatePartnerBrand(id: ID!, partnerBrandInput: PartnerBrandInput): PartnerBrand
+  deletePartnerBrand(id: ID!): PartnerBrand
+
+  """
+  This is used to generate a consumer, but if they are already created we will return their details
+  """
+  findOrCreateConsumer(consumerInput: ConsumerInput): Consumer
+
+  """Change or update the consumer record with additional information"""
+  updateConsumer(consumerInput: ConsumerInput): Consumer
+
+  """
+  Link the currently logged in cergea consumer account to an existing Collinson account
+  """
+  linkAccount(linkedAccountInput: LinkedAccountInput): LinkedAccount
+
+  """
+  Create a mobile app data record for a new app instance against consumer
+  """
+  findOrCreateMobileAppData(mobileAppDataInput: MobileAppDataInput): MobileAppData
+
+  """Update mobile app data record with additional information"""
+  updateMobileAppData(mobileAppDataInput: MobileAppDataInput): MobileAppData
+  createEntitlement(entitlementInput: EntitlementInput!): Entitlement
+  updateEntitlement(id: ID!, entitlementInput: EntitlementInput!): Entitlement
+  redeemEntitlement(id: ID!, redeemedProduct: EntitlementProductType!): Entitlement
+  deleteEntitlement(id: ID!): Boolean
+  createMembershipPlan(membershipPlanInput: MembershipPlanInput!): MembershipPlan
+  createInvitation(invitationInput: InvitationInput): Invitation
+  acceptInvitation(acceptInvitationInput: AcceptInvitationInput!): Invitation
+  cancelInvitation(id: ID!): Invitation
+
+  """
+  This is used to generate a partner, but if they are already created we will return their details
+  """
+  findOrCreatePartner(partnerInput: PartnerInput): Partner
+  updatePartner(partnerInput: PartnerInput): Partner
+
+  """
+  A partner is limited to view the bookings of certain experiences, this allows you to link an 
+  experience to the partner record so they can view bookings for that experience.
+  """
+  linkExperience(partnerKey: PartnerKey, experienceKey: ExperienceKey): Partner
+  unlinkExperience(partnerKey: PartnerKey, experienceKey: ExperienceKey): Partner
+}
+
+scalar ObjectID
+
+type OpeningTimes {
+  """
+  The opening times expection text. This will be deprecated in favour of variations
+  """
+  exceptions: String
+
+  """Metadata about editor and last edited"""
+  meta: Meta
+
+  """The standard opening time schedules"""
+  schedules: DaySchedules
+
+  """The variations to the standard opening times"""
+  variations: [Variation]
+}
+
+input OpeningTimesInput {
+  """
+  The opening times expection text. This will be deprecated in favour of variations
+  """
+  exceptions: String
+
+  """Metadata about editor and last edited"""
+  meta: MetaInput
+
+  """The standard opening time schedules"""
+  schedules: DaySchedulesInput
+
+  """The variations to the standard opening times"""
+  variations: [VariationInput]
+}
+
+type Operator {
+  id: ID!
+  name: String
+  experiences: [Experience]
+}
+
+type Outlet {
+  id: ID!
+
+  """A list of ancillary products available at the outlet"""
+  ancillaryProducts: [AncillaryProduct]!
+
+  """The code of the outlet"""
+  code: String
+
+  """The name of the outlet"""
+  name: String!
+
+  """The legacy code of the outlet (Lounge Code) eg LHR13"""
+  legacyCode: String
+
+  """Whether the outlet has disabled access"""
+  hasDisabledAccess: Boolean!
+
+  """The category of outlet eg AIRPORT, FERRY_STATION, RAILWAY_STATION"""
+  category: OutletCategory!
+
+  """The email address for reservations"""
+  reservationEmail: String
+
+  """The Salesforce ID of the outlet"""
+  salesforceID: String!
+
+  """The status of the outlet whether it is active or not"""
+  status: OutletStatus!
+
+  """
+  Categories of the products associated with the outlet. These are used for filtering
+  """
+  productCategories: [ProductCategory]!
+
+  """The tier of the outlet for example Gold or Black"""
+  tier: Tier
+
+  """The location of the outlet"""
+  location: Location!
+
+  """Metadata about editor and last edited"""
+  meta: Meta
+
+  """The opening times of the outlet"""
+  openingTimes: OpeningTimes
+
+  """The partner brand of the outlet"""
+  partnerBrand: PartnerBrand!
+
+  """A list of products available at the outlet"""
+  products: [Product]!
+
+  """The content data from Contentful"""
+  content: OutletContent
+
+  """Object containing outlet tags (tier, isoCountryCode, category)"""
+  tags: OutletTags
+}
+
+input OutletAndProductFilters {
+  outlet: OutletFilters
+  product: ProductFilters
+}
+
+enum OutletCategory {
+  AIRPORT
+  FERRY_STATION
+  RAILWAY_STATION
+}
+
+"""
+[See type definition](https://app.contentful.com/spaces/687qsr16btly/content_types/outletContent)
+"""
+type OutletContent implements Entry {
+  sys: Sys!
+  contentfulMetadata: ContentfulMetadata!
+  linkedFrom(allowedLocales: [String]): OutletContentLinkingCollections
+  name(locale: String): String
+  legacyCode(locale: String): String
+  conditions(preview: Boolean, locale: String, where: ConditionsFilter): Conditions
+  facilities(preview: Boolean, locale: String, where: FacilitiesFilter): Facilities
+  locationSummary(preview: Boolean, locale: String, where: LocationSummaryFilter): LocationSummary
+  media(preview: Boolean, locale: String, where: MediaFilter): Media
+}
+
+type OutletContentCollection {
+  total: Int!
+  skip: Int!
+  limit: Int!
+  items: [OutletContent]!
+}
+
+input OutletContentFilter {
+  conditions: cfConditionsNestedFilter
+  facilities: cfFacilitiesNestedFilter
+  locationSummary: cfLocationSummaryNestedFilter
+  media: cfMediaNestedFilter
+  sys: SysFilter
+  contentfulMetadata: ContentfulMetadataFilter
+  name_exists: Boolean
+  name: String
+  name_not: String
+  name_in: [String]
+  name_not_in: [String]
+  name_contains: String
+  name_not_contains: String
+  legacyCode_exists: Boolean
+  legacyCode: String
+  legacyCode_not: String
+  legacyCode_in: [String]
+  legacyCode_not_in: [String]
+  legacyCode_contains: String
+  legacyCode_not_contains: String
+  conditions_exists: Boolean
+  facilities_exists: Boolean
+  locationSummary_exists: Boolean
+  media_exists: Boolean
+  OR: [OutletContentFilter]
+  AND: [OutletContentFilter]
+}
+
+type OutletContentLinkingCollections {
+  entryCollection(skip: Int = 0, limit: Int = 100, preview: Boolean, locale: String): EntryCollection
+}
+
+enum OutletContentOrder {
+  name_ASC
+  name_DESC
+  legacyCode_ASC
+  legacyCode_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+}
+
+input OutletFilters {
+  category: [OutletCategory]
+  tier: [Tier]
+  isoCountryCode: [ISOCountryCode]
+  region: [OutletRegion]
+}
+
+input OutletInput {
+  """The name of the outlet"""
+  name: String!
+
+  """The legacy code of the outlet (Lounge Code) eg LHR13"""
+  legacyCode: String
+
+  """Whether the outlet has disabled access"""
+  hasDisabledAccess: Boolean!
+
+  """The category of outlet eg AIRPORT, FERRY_STATION, RAILWAY_STATION"""
+  category: OutletCategory!
+
+  """The email address for reservations"""
+  reservationEmail: String
+
+  """The Salesforce ID of the outlet"""
+  salesforceID: String!
+
+  """The status of the outlet whether it is active or not"""
+  status: OutletStatus!
+
+  """
+  Categories of the products associated with the outlet. These are used for filtering
+  """
+  productCategories: [ProductCategory]!
+
+  """The tier of the outlet for example Gold or Black"""
+  tier: Tier
+
+  """The location of the outlet"""
+  location: LocationInput!
+
+  """Metadata about editor and last edited"""
+  meta: MetaInput
+
+  """The opening times of the outlet"""
+  openingTimes: OpeningTimesInput
+
+  """The partner brand of the outlet"""
+  partnerBrand: PartnerBrandKey!
+}
+
+input OutletKey {
+  id: ID!
+}
+
+enum OutletRegion {
+  APAC
+  AMERICAS
+  EMEA
+  GLOBAL
+}
+
+enum OutletStatus {
+  LIVE
+}
+
+type OutletTags {
+  category: OutletCategory
+  tier: Tier
+  isoCountryCode: ISOCountryCode
+  region: OutletRegion
+}
+
+type OutletTagsList {
+  category: [OutletCategory]
+  tier: [Tier]
+  isoCountryCode: [ISOCountryCode]
+  region: [OutletRegion]
+}
+
+type PageInfo {
+  currentPage: Int
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+  totalPages: Int
+}
+
+type PaginatedOutlets {
+  items: [Outlet]
+  pageInfo: PageInfo
+  totalItemCount: Int
+}
+
+type Partner {
+  id: ID!
+  experiences: [Experience!]!
+  fullName: String
+  firstName: String
+  lastName: String
+  emailAddress: String!
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type PartnerBrand {
+  id: ID!
+  outlets: [Outlet]!
+  content: PartnerBrandContent
+
+  """The name of the partner brand"""
+  name: String!
+
+  """The salesforce ID of the partner brand"""
+  salesforceID: String!
+}
+
+"""
+[See type definition](https://app.contentful.com/spaces/687qsr16btly/content_types/partnerBrandContent)
+"""
+type PartnerBrandContent implements Entry {
+  sys: Sys!
+  contentfulMetadata: ContentfulMetadata!
+  linkedFrom(allowedLocales: [String]): PartnerBrandContentLinkingCollections
+  name(locale: String): String
+  logo(preview: Boolean, locale: String): Asset
+}
+
+type PartnerBrandContentCollection {
+  total: Int!
+  skip: Int!
+  limit: Int!
+  items: [PartnerBrandContent]!
+}
+
+input PartnerBrandContentFilter {
+  sys: SysFilter
+  contentfulMetadata: ContentfulMetadataFilter
+  name_exists: Boolean
+  name: String
+  name_not: String
+  name_in: [String]
+  name_not_in: [String]
+  name_contains: String
+  name_not_contains: String
+  logo_exists: Boolean
+  OR: [PartnerBrandContentFilter]
+  AND: [PartnerBrandContentFilter]
+}
+
+type PartnerBrandContentLinkingCollections {
+  entryCollection(skip: Int = 0, limit: Int = 100, preview: Boolean, locale: String): EntryCollection
+}
+
+enum PartnerBrandContentOrder {
+  name_ASC
+  name_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+}
+
+input PartnerBrandInput {
+  """The name of the partner brand"""
+  name: String!
+
+  """The salesforce ID of the partner brand"""
+  salesforceID: String!
+}
+
+input PartnerBrandKey {
+  id: ID!
+}
+
+input PartnerInput {
+  emailAddress: String!
+  firstName: String
+  lastName: String
+  phone: String
+}
+
+input PartnerKey {
+  id: ID!
+}
+
+input PaymentInput {
+  stripePaymentID: String
+  orderID: String
+}
+
+"""The lifecycle of payment options"""
+enum PaymentOption {
+  Charge
+  NoPaymentRequired
+  Refund
+}
+
+enum PrimaryProductAccessType {
+  RESERVATION
+  RESERVATION_FEE_ONLY
+  WALK_UP
+}
+
+type Product {
+  id: ID!
+
+  """The access type of the product"""
+  accessType: PrimaryProductAccessType!
+
+  """The product name generated from the accessType"""
+  name: String!
+
+  """The product category"""
+  category: ProductCategory!
+
+  """The Stripe ID of the product"""
+  ppStripeID: String
+
+  """The relevant Salesforce ID of the product"""
+  salesforceID: String!
+
+  """The stage of the product based on Saleforce stage"""
+  stage: ProductStage!
+
+  """The status of the product"""
+  status: ProductStatus!
+
+  """The product tier for example Gold or Black"""
+  tier: Tier
+
+  """The outlet associated with the product"""
+  outlet: Outlet
+
+  """A list of costs for the product by programme"""
+  costs: [ProductCost]!
+
+  """A list of sale prices for the product by programme"""
+  salePrices: [ProductSalePrice]!
+
+  """Object containing product tags (tier, accessType, category)"""
+  tags: ProductTags
+}
+
+enum ProductCategory {
+  EAT
+  LOUNGE
+  REFRESH
+  REST
+  UNWIND
+}
+
+type ProductCost {
+  """The cost to the partner when pricing type is flat"""
+  cost: Float
+
+  """The currency of the cost eg GBP"""
+  costCurrency: String!
+
+  """
+  The tax percentage to be applied to the cost for example 20% VAT in the UK
+  """
+  defaultTaxPercentage: Int!
+
+  """The programme this cost is for"""
+  programme: Programme!
+
+  """The cost to the partner when pricing type is variable"""
+  projectedCost: Float
+
+  """The cost of a reservation part only"""
+  reservationCost: Float!
+
+  """The cost type either flat or tiered"""
+  type: ProductCostType!
+}
+
+input ProductCostInput {
+  """The cost to the partner when pricing type is flat"""
+  cost: Float
+
+  """The currency of the cost eg GBP"""
+  costCurrency: String!
+
+  """
+  The tax percentage to be applied to the cost for example 20% VAT in the UK
+  """
+  defaultTaxPercentage: Int!
+
+  """The programme this cost is for"""
+  programme: Programme!
+
+  """The cost to the partner when pricing type is variable"""
+  projectedCost: Float
+
+  """The cost of a reservation part only"""
+  reservationCost: Float!
+
+  """The cost type either flat or tiered"""
+  type: ProductCostType!
+}
+
+enum ProductCostType {
+  FLAT
+  TIERED
+}
+
+input ProductFilters {
+  accessType: [PrimaryProductAccessType]
+  category: [ProductCategory]
+  tier: [Tier]
+}
+
+input ProductInput {
+  """The access type of the product"""
+  accessType: PrimaryProductAccessType!
+
+  """The product name generated from the accessType"""
+  name: String!
+
+  """The product category"""
+  category: ProductCategory!
+
+  """The Stripe ID of the product"""
+  ppStripeID: String
+
+  """The relevant Salesforce ID of the product"""
+  salesforceID: String!
+
+  """The stage of the product based on Saleforce stage"""
+  stage: ProductStage!
+
+  """The status of the product"""
+  status: ProductStatus!
+
+  """The product tier for example Gold or Black"""
+  tier: Tier
+
+  """The Outlet ID of the product"""
+  outlet: OutletKey!
+
+  """A list of costs for the product by programme"""
+  costs: [ProductCostInput]!
+
+  """A list of sale prices for the product by programme"""
+  salePrices: [ProductSalePriceInput]!
+
+  """Type of the product (PRIMARY or ANCILLARY)"""
+  type: CatalogueProductType
+}
+
+input ProductKey {
+  id: ID!
+}
+
+type ProductSalePrice {
+  """The programme this sale price is for"""
+  programme: Programme!
+
+  """The sale price to the customer"""
+  salePrice: Float!
+
+  """The currency of the sale price eg GBP"""
+  salePriceCurrency: String!
+
+  """The Stripe ID of the price"""
+  stripePriceID: String
+}
+
+input ProductSalePriceInput {
+  """The programme this sale price is for"""
+  programme: Programme!
+
+  """The sale price to the customer"""
+  salePrice: Float!
+
+  """The currency of the sale price eg GBP"""
+  salePriceCurrency: String!
+
+  """The Stripe ID of the price"""
+  stripePriceID: String
+}
+
+enum ProductStage {
+  LIVE
+  CLOSED
+  DECLINED
+  DRAFT
+  ONBOARDING
+}
+
+enum ProductStatus {
+  ACTIVE
+  INACTIVE
+  STOP_SALE
+}
+
+type ProductTags {
+  accessType: PrimaryProductAccessType
+  category: ProductCategory
+  tier: Tier
+}
+
+type ProductTagsList {
+  accessType: [PrimaryProductAccessType]
+  category: [ProductCategory]
+  tier: [Tier]
+}
+
+enum ProductType {
+  Lounge
+}
+
+enum Programme {
+  LK
+  LP
+  PP
+}
+
+"""
+The 'Quality' type represents quality as whole numeric values between `1` and `100`.
+"""
+scalar Quality
+
+type Query {
+  getBookings(experienceID: ID!, status: BookingStatus): [Booking!]!
+  getBookingByID(id: ID!): Booking
+  getAvailableSlots(data: AvailabilityInput): Availability!
+  getPartnerBrandByID(id: ID!): PartnerBrand
+  getPartnerBrandBySalesforceID(salesforceID: String!): PartnerBrand
+  getPartnerBrands(limit: Int): [PartnerBrand]
+  getProductByID(id: ID!): Product
+  getProductBySalesforceID(salesforceID: String!): Product
+  getOutletByID(id: ID!): Outlet
+  getOutletBySalesforceID(salesforceID: String!): Outlet
+  getOutlets(page: Int, pageSize: Int, filters: OutletAndProductFilters): PaginatedOutlets
+  getOutletTags: OutletTagsList
+  getProductTags: ProductTagsList
+  getConsumer: Consumer
+  getConsumerByID(id: ID!): Consumer
+  getConsumerByEmailAddress(emailAddress: String!): Consumer
+  getMobileAppDataByAppId(appId: ID!): MobileAppData
+  asset(id: String!, preview: Boolean, locale: String): Asset
+  assetCollection(skip: Int = 0, limit: Int = 100, preview: Boolean, locale: String, where: AssetFilter, order: [AssetOrder]): AssetCollection
+  conditions(id: String!, preview: Boolean, locale: String): Conditions
+  conditionsCollection(skip: Int = 0, limit: Int = 100, preview: Boolean, locale: String, where: ConditionsFilter, order: [ConditionsOrder]): ConditionsCollection
+  media(id: String!, preview: Boolean, locale: String): Media
+  mediaCollection(skip: Int = 0, limit: Int = 100, preview: Boolean, locale: String, where: MediaFilter, order: [MediaOrder]): MediaCollection
+  outletContent(id: String!, preview: Boolean, locale: String): OutletContent
+  outletContentCollection(skip: Int = 0, limit: Int = 100, preview: Boolean, locale: String, where: OutletContentFilter, order: [OutletContentOrder]): OutletContentCollection
+  partnerBrandContent(id: String!, preview: Boolean, locale: String): PartnerBrandContent
+  partnerBrandContentCollection(skip: Int = 0, limit: Int = 100, preview: Boolean, locale: String, where: PartnerBrandContentFilter, order: [PartnerBrandContentOrder]): PartnerBrandContentCollection
+  facilities(id: String!, preview: Boolean, locale: String): Facilities
+  facilitiesCollection(skip: Int = 0, limit: Int = 100, preview: Boolean, locale: String, where: FacilitiesFilter, order: [FacilitiesOrder]): FacilitiesCollection
+  locationSummary(id: String!, preview: Boolean, locale: String): LocationSummary
+  locationSummaryCollection(skip: Int = 0, limit: Int = 100, preview: Boolean, locale: String, where: LocationSummaryFilter, order: [LocationSummaryOrder]): LocationSummaryCollection
+  entryCollection(skip: Int = 0, limit: Int = 100, preview: Boolean, locale: String, where: EntryFilter, order: [EntryOrder]): EntryCollection
+  _node(id: ID!, preview: Boolean, locale: String): _Node
+  getEntitlement(id: ID!): Entitlement
+  getEntitlements(filter: GetEntitlementsFilter): [Entitlement!]!
+  getMembershipPlanByID(id: ID!): MembershipPlan
+  getInvitations(experienceID: ID): [Invitation!]!
+  getInvitationByID(id: ID!): Invitation
+  isInvitationTokenValid(inviteToken: String!): Boolean
+  getPartner: Partner
+  getPartnerByID(id: ID!): Partner
+  getPartnerByEmailAddress(emailAddress: String!): Partner
+  searchExperiences(query: String, geoLocation: GeoQueryInput, searchFilter: SearchFilterInput): [Experience]
+  getExperienceByID(id: String): Experience
+  getFlightDetails(flightDetails: FlightDetailsInput): [FlightDetails!]!
+  getFlightDetailsHealthCheck(flightDetails: FlightDetailsInput): [FlightDetails!]!
+}
+
+type Redemption {
+  defaultRedemptionTypeCode: String
+  defaultMaxGuests: Int
+  isGuestAllowed: Boolean
+}
+
+"""The lifecycle statuses of a refund"""
+enum RefundStatus {
+  """Cancelled"""
+  CANCELED
+
+  """Failed"""
+  FAILED
+
+  """Default value"""
+  NOT_APPLICABLE
+
+  """Requires action on dashboard"""
+  PENDING
+
+  """Requires action on dashboard"""
+  REQUIRES_ACTION
+
+  """Successful payment"""
+  SUCCEEDED
+}
+
+type Schedule {
+  """The start time of the schedule"""
+  startTime: String!
+
+  """The end time of the schedule"""
+  endTime: String!
+}
+
+input ScheduleInput {
+  """The start time of the schedule"""
+  startTime: String!
+
+  """The end time of the schedule"""
+  endTime: String!
+}
+
+type SearchFilter {
+  attribute: String
+  value: String
+}
+
+input SearchFilterInput {
+  attribute: String
+  value: String
+}
+
+type Slots {
+  startDate: Date
+  endDate: Date
+  maxDuration: String
+}
+
+type Sys {
+  id: String!
+
+  """The locale that was requested - mainly used for Apollo Federation."""
+  locale: String
+  spaceId: String!
+  environmentId: String!
+  publishedAt: DateTime
+  firstPublishedAt: DateTime
+  publishedVersion: Int
+}
+
+input SysFilter {
+  id_exists: Boolean
+  id: String
+  id_not: String
+  id_in: [String]
+  id_not_in: [String]
+  id_contains: String
+  id_not_contains: String
+  publishedAt_exists: Boolean
+  publishedAt: DateTime
+  publishedAt_not: DateTime
+  publishedAt_in: [DateTime]
+  publishedAt_not_in: [DateTime]
+  publishedAt_gt: DateTime
+  publishedAt_gte: DateTime
+  publishedAt_lt: DateTime
+  publishedAt_lte: DateTime
+  firstPublishedAt_exists: Boolean
+  firstPublishedAt: DateTime
+  firstPublishedAt_not: DateTime
+  firstPublishedAt_in: [DateTime]
+  firstPublishedAt_not_in: [DateTime]
+  firstPublishedAt_gt: DateTime
+  firstPublishedAt_gte: DateTime
+  firstPublishedAt_lt: DateTime
+  firstPublishedAt_lte: DateTime
+  publishedVersion_exists: Boolean
+  publishedVersion: Float
+  publishedVersion_not: Float
+  publishedVersion_in: [Float]
+  publishedVersion_not_in: [Float]
+  publishedVersion_gt: Float
+  publishedVersion_gte: Float
+  publishedVersion_lt: Float
+  publishedVersion_lte: Float
+}
+
+enum Tier {
+  GOLD
+  BLACK
+  LOW_COST
+  PRIVATE
+}
+
+enum TimezoneType {
+  UTC
+  LOCAL
+}
+
+type Variation {
+  type: VariationType!
+  date: String!
+}
+
+input VariationInput {
+  type: VariationType!
+  date: String!
+}
+
+enum VariationType {
+  ANNUAL
+  DATE_SPECIFIC
+}
