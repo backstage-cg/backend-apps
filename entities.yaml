@@ -12,6 +12,8 @@ apiVersion: backstage.io/v1alpha1
 kind: API
 metadata:
   name: gateway-api
+  annotations:
+    backstage.io/graphql-schema-source: https://gateway-api.test.cergea.com/graphql
 spec:
   type: http
   lifecycle: experimental
