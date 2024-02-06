@@ -31,5 +31,6 @@ spec:
   lifecycle: experimental
   owner: backend-apps-team
   system: backend-apps
-  definition: http
+  definition:
+    $text: https://github.com/backstage-cg/backend-apps/blob/main/gateway-api-schema.json
   subComponentOf: [gateway-api]
