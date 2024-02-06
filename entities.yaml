@@ -30,3 +30,4 @@ spec:
   owner: backstage-cg
   system: backend-apps
   definition: graphql
+  subComponentOf: [gateway-api]
