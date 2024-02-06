@@ -26,9 +26,9 @@ kind: API
 metadata:
   name: booking-api
 spec:
-  type: website
+  type: graphql
   lifecycle: experimental
   owner: backstage-cg
   system: backend-apps
-  definition: graphql
+  definition: http
   subComponentOf: [gateway-api]
