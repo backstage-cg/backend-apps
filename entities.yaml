@@ -13,7 +13,7 @@ kind: API
 metadata:
   name: gateway-api
 spec:
-  type: graphql-federated-service
+  type: http
   lifecycle: experimental
   owner: backstage-cg
   system: backend-apps
