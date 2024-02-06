@@ -14,6 +14,7 @@ metadata:
   name: gateway-api
   annotations:
     backstage.io/graphql-schema-source: https://gateway-api.test.cergea.com/graphql
+spec:
   type: graphql-federated-service
   lifecycle: experimental
   owner: backstage-cg
