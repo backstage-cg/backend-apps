@@ -12,8 +12,9 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: gateway-api
-spec:
-  type: graphql
+  annotations:
+    backstage.io/graphql-schema-source: https://gateway-api.test.cergea.com/graphql
+  type: graphql-federated-service
   lifecycle: experimental
   owner: backstage-cg
   system: backend-apps
@@ -25,7 +26,7 @@ kind: API
 metadata:
   name: booking-api
 spec:
-  type: graphql
+  type: graphql-federated-service
   lifecycle: experimental
   owner: backstage-cg
   system: backend-apps
