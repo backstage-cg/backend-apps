@@ -17,7 +17,8 @@ spec:
   lifecycle: experimental
   owner: backend-apps-team
   system: backend-apps
-  definition: http
+  definition:
+    $text: https://github.com/backstage-cg/backend-apps/blob/main/gateway-api-schema.json
   providesApis: [booking-api]
 ---
 # https://backstage.io/docs/features/software-catalog/descriptor-format#kind-api
