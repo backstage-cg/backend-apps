@@ -17,7 +17,7 @@ spec:
   lifecycle: experimental
   owner: backstage-cg
   system: backend-apps
-  definition: graphql
+  definition: http
   providesApis: [booking-api]
 ---
 # https://backstage.io/docs/features/software-catalog/descriptor-format#kind-api
