@@ -26,6 +26,9 @@ metadata:
   description: Backend Applications serving multiple GraphQL APIs.
   annotations:
     backstage.io/techdocs-ref: dir:.
+  tags:
+    - internal
+    - monorepo
 spec:
   type: service
   lifecycle: production
@@ -35,3 +38,4 @@ spec:
     - gateway-api
     - consumer-api
     - booking-api
+
