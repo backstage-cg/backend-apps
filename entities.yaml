@@ -17,3 +17,19 @@ spec:
     - https://github.com/backstage-cg/backend-apps/blob/main/apis/booking-api/catalog-info.yaml
     - https://github.com/backstage-cg/backend-apps/blob/main/apis/consumer-api/catalog-info.yaml
     - https://github.com/backstage-cg/backend-apps/blob/main/apis/gateway-api/catalog-info.yaml
+---
+# https://backstage.io/docs/features/software-catalog/descriptor-format#kind-api
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: backend-apps
+  description: Backend Applications serving multiple GraphQL APIs.
+spec:
+  type: service
+  lifecycle: production
+  owner: backend-apps-team
+  system: backend
+  providesApis:
+    - gateway-api
+    - consumer-api
+    - booking-api
