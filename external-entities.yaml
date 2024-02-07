@@ -1,0 +1,25 @@
+---
+# https://backstage.io/docs/features/software-catalog/descriptor-format#kind-api
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: supertokens
+  description: Open source user authentication.
+  links:
+    - url: https://supertokens.com/docs/guides
+      title: Documentation
+      icon: docs
+  tags:
+    - auth
+    - security
+    - backend
+    - api
+    - external
+spec:
+  type: openapi
+  lifecycle: experimental
+  owner: auth-team
+  system: backend
+  definition:
+    $text: https://github.com/backstage-cg/backend-apps/blob/main/booking-api-schema
+  subComponentOf: [gateway-api]
