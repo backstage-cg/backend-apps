@@ -14,6 +14,6 @@ metadata:
 spec:
   type: url
   targets:
-    - ./apis/booking-api/catalogue-info.yaml
-    - ./apis/consumer-api/catalogue-info.yaml
-    - ./apis/gateway-api/catalogue-info.yaml
+    - https://github.com/backstage-cg/backend-apps/blob/main/apis/booking-api/catalog-info.yaml
+    - https://github.com/backstage-cg/backend-apps/blob/main/apis/consumer-api/catalog-info.yaml
+    - https://github.com/backstage-cg/backend-apps/blob/main/apis/gateway-api/catalog-info.yaml
