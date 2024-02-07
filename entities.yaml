@@ -26,6 +26,7 @@ metadata:
   description: Backend Applications serving multiple GraphQL APIs.
   annotations:
     backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: backstage-cr/backend-apps
   tags:
     - internal
     - monorepo

@@ -17,8 +17,6 @@ metadata:
     - api
     - nodejs
     - express
-  annotations:
-    github.com/project-slug: backstage-cr/backend-apps
 spec:
   type: graphql
   lifecycle: experimental
