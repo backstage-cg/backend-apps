@@ -6,7 +6,7 @@ metadata:
   name: gateway-api
   description: Gateway API for backend apps.
   links:
-    - url: /apollo-explorer
+    - url: http://localhost:3000/apollo-explorer
       title: Apollo Explorer
       icon: code
 spec:
