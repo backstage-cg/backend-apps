@@ -1,0 +1,14 @@
+---
+# https://backstage.io/docs/features/software-catalog/descriptor-format#kind-component
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: gateway-api
+  description: Gateway API for backend apps.
+spec:
+  type: graphql
+  lifecycle: experimental
+  owner: backend-apps-team
+  system: backend-apps
+  definition:
+    $text: https://github.com/backstage-cg/backend-apps/blob/main/gateway-api-schema
