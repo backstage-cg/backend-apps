@@ -2,3 +2,8 @@ site_name: 'backend-apps'
 
 plugins:
   - techdocs-core
+
+markdown_extensions:
+  # ... other extensions 
+  - pymdownx.snippets:
+      check_paths: true
