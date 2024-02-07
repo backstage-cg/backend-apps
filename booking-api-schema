@@ -1,0 +1,296 @@
+extend schema
+  @link(url: "https://specs.apollo.dev/link/v1.0")
+  @link(url: "https://specs.apollo.dev/federation/v2.0", import: ["@key", "@shareable"])
+{
+  query: Query
+  mutation: Mutation
+}
+
+directive @link(url: String, as: String, for: link__Purpose, import: [link__Import]) repeatable on SCHEMA
+
+directive @key(fields: federation__FieldSet!, resolvable: Boolean = true) repeatable on OBJECT | INTERFACE
+
+directive @federation__requires(fields: federation__FieldSet!) on FIELD_DEFINITION
+
+directive @federation__provides(fields: federation__FieldSet!) on FIELD_DEFINITION
+
+directive @federation__external(reason: String) on OBJECT | FIELD_DEFINITION
+
+directive @federation__tag(name: String!) repeatable on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUMENT_DEFINITION | SCALAR | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION
+
+directive @federation__extends on OBJECT | INTERFACE
+
+directive @shareable on OBJECT | FIELD_DEFINITION
+
+directive @federation__inaccessible on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUMENT_DEFINITION | SCALAR | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION
+
+directive @federation__override(from: String!) on FIELD_DEFINITION
+
+type Query {
+  getBookings(experienceID: ID!, status: BookingStatus): [Booking!]!
+  getBookingByID(id: ID!): Booking
+  getAvailableSlots(data: AvailabilityInput): Availability!
+  _entities(representations: [_Any!]!): [_Entity]!
+  _service: _Service!
+}
+
+type Mutation {
+  createBooking(bookingInput: BookingInput): Booking
+  confirmAmendment(amendmentInput: AmendmentInput): Amendment
+  deleteBooking(id: ID!): Booking
+  confirmBooking(id: ID!): Booking
+  noShowBooking(id: ID!): Booking
+  payForBooking(id: ID!, paymentInput: PaymentInput): Booking
+  declineBooking(id: ID!): Booking
+  checkinBooking(id: ID!): Booking
+  cancelBooking(id: ID!): Booking
+}
+
+"""
+A record for the sale of a service, this could be either a reservation, walkup or other state.
+"""
+type Booking
+  @key(fields: "id")
+{
+  id: ID!
+  actingAccount: String
+  consumer: Consumer
+  experience: Experience
+  orderID: String
+  invoice: String
+  stripePaymentID: String
+  price: Float
+  price_currency: String
+  bookedFrom(timezoneType: TimezoneType): String!
+  bookedTo(timezoneType: TimezoneType): String!
+  lastArrival(timezoneType: TimezoneType): String!
+  status: BookingStatus!
+  createdAt: Date! @shareable
+  updatedAt: Date! @shareable
+  type: BookingType!
+  guestAdultCount(value: Int = 0): Int!
+  guestChildrenCount(value: Int = 0): Int!
+  guestInfantCount(value: Int = 0): Int!
+  metadata: JSONObject
+  reference: String!
+  refundStatus: String
+  refundedAt: Date
+}
+
+"""The lifecycle statuses of a booking"""
+enum BookingStatus {
+  AMENDED
+
+  """A booking has been created, but not yet paid for"""
+  INITIALIZED
+
+  """
+  Booking has been paid for and is now pending confirmation from the operator
+  """
+  PENDING
+  CONFIRMED
+  DECLINED
+
+  """The booking has now been redeemed after being confirmed"""
+  CHECKED_IN
+  COMPLETED_VISIT
+  CANCELLED
+  ERRORED
+  NO_SHOW
+  BOOKED
+  CANCELATION_FAILED
+}
+
+"""The category of booking that has been made."""
+enum BookingType {
+  WALK_UP
+  RESERVATION
+  RESERVATION_FEE_ONLY
+}
+
+input BookingInput {
+  actingAccount: String
+  experience: ExperienceKey!
+  bookedFrom: Date!
+  bookedTo: Date!
+  lastArrival: Date
+  invoice: String
+  stripePaymentID: String
+  type: BookingType!
+  guestAdultCount: Int! = 0
+  guestChildrenCount: Int! = 0
+  guestInfantCount: Int! = 0
+  metadata: JSONObject
+}
+
+enum TimezoneType {
+  UTC
+  LOCAL
+}
+
+input PaymentInput {
+  stripePaymentID: String
+  orderID: String
+}
+
+type Consumer
+  @key(fields: "id")
+{
+  id: ID!
+  bookings: [Booking!]!
+}
+
+type Experience
+  @key(fields: "id")
+{
+  id: ID!
+  bookings: [Booking!]!
+}
+
+input ExperienceKey {
+  id: ID!
+}
+
+scalar Date
+
+scalar JSONObject
+
+input FlightInformation {
+  type: String!
+  dateTime: Date!
+  airport: String
+  terminal: String!
+}
+
+input Guests {
+  adultCount: Int! = 0
+  childrenCount: Int! = 0
+  infantCount: Int! = 0
+}
+
+input LegacyProductInput {
+  productType: ProductType
+  productID: String!
+  supplierCode: String!
+}
+
+"""The lifecycle of payment options"""
+enum PaymentOption {
+  Charge
+  NoPaymentRequired
+  Refund
+}
+
+"""The lifecycle statuses of an amendment"""
+enum AmendmentStatus {
+  CHARGE_COMPLETED
+  CHARGE_FAILED
+  CHARGE_INITIALIZED
+  CONFIRMED
+  FAILED_TO_UPDATE_BOOKING_RECORD
+  INITIALIZED
+  REFUND_FAILED
+  SNAPLOGIC_AMENDMENT_FAILED
+  SNAPLOGIC_DATA_IS_INCORRECT
+}
+
+input AmendmentInput {
+  actingAccount: String
+  bookingID: String!
+  bookedFrom: Date!
+  bookedTo: Date!
+  lastArrival: Date
+  guestAdultCount: Int! = 0
+  guestChildrenCount: Int! = 0
+  guestInfantCount: Int! = 0
+}
+
+type Amendment
+  @key(fields: "id")
+{
+  id: ID!
+  bookingID: ID!
+  actingAccount: String
+  booking: Booking
+  bookedFrom(timezoneType: TimezoneType): String!
+  bookedTo(timezoneType: TimezoneType): String!
+  lastArrival(timezoneType: TimezoneType): String!
+  createdAt: Date! @shareable
+  updatedAt: Date! @shareable
+  guestAdultCount(value: Int = 1): Int!
+  guestChildrenCount(value: Int = 0): Int!
+  guestInfantCount(value: Int = 0): Int!
+  paymentOption: PaymentOption!
+  price: Int!
+  reference: String!
+  refundStatus: String
+  refundedAt: Date
+  status: AmendmentStatus!
+}
+
+input AvailabilityInput {
+  flightInformation: FlightInformation!
+  guests: Guests!
+  product: LegacyProductInput!
+}
+
+type Slots {
+  startDate: Date
+  endDate: Date
+  maxDuration: String
+}
+
+type Availability {
+  messageID: String
+  temporaryReservationID: String
+  slots: [Slots!]!
+}
+
+enum ProductType {
+  Lounge
+}
+
+"""The lifecycle statuses of a refund"""
+enum RefundStatus {
+  """Cancelled"""
+  CANCELED
+
+  """Failed"""
+  FAILED
+
+  """Default value"""
+  NOT_APPLICABLE
+
+  """Requires action on dashboard"""
+  PENDING
+
+  """Requires action on dashboard"""
+  REQUIRES_ACTION
+
+  """Successful payment"""
+  SUCCEEDED
+}
+
+enum link__Purpose {
+  """
+  `SECURITY` features provide metadata necessary to securely resolve fields.
+  """
+  SECURITY
+
+  """
+  `EXECUTION` features provide metadata necessary for operation execution.
+  """
+  EXECUTION
+}
+
+scalar link__Import
+
+scalar federation__FieldSet
+
+scalar _Any
+
+type _Service {
+  sdl: String
+}
+
+union _Entity = Amendment | Booking | Consumer | Experience
