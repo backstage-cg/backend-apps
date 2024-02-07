@@ -17,8 +17,6 @@ metadata:
     - api
     - nodejs
     - express
-  annotations:
-    backstage.io/techdocs-ref: dir:./apis/booking-api # This is a relative path to the techdocs directory
 spec:
   type: graphql
   lifecycle: experimental
