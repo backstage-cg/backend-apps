@@ -5,6 +5,20 @@ kind: API
 metadata:
   name: booking-api
   description: GraphQL API for booking.
+  links:
+    - url: http://localhost:3000/apollo-explorer
+      title: Apollo Explorer
+      icon: code
+  tags:
+    - javascript
+    - graphql
+    - backend
+    - booking
+    - api
+    - nodejs
+    - express
+  annotations:
+    backstage.io/techdocs-ref: dir:./apis/booking-api # This is a relative path to the techdocs directory
 spec:
   type: graphql
   lifecycle: experimental

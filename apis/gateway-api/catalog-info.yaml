@@ -9,6 +9,14 @@ metadata:
     - url: http://localhost:3000/apollo-explorer
       title: Apollo Explorer
       icon: code
+  tags:
+    - javascript
+    - graphql
+    - backend
+    - gateway
+    - api
+    - nodejs
+    - express
 spec:
   type: graphql
   lifecycle: experimental
