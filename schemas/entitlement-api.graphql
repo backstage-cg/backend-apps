@@ -1,0 +1,136 @@
+extend schema
+  @link(url: "https://specs.apollo.dev/link/v1.0")
+  @link(url: "https://specs.apollo.dev/federation/v2.0", import: ["@key", "@shareable"])
+{
+  query: Query
+  mutation: Mutation
+}
+
+directive @link(url: String, as: String, for: link__Purpose, import: [link__Import]) repeatable on SCHEMA
+
+directive @key(fields: federation__FieldSet!, resolvable: Boolean = true) repeatable on OBJECT | INTERFACE
+
+directive @federation__requires(fields: federation__FieldSet!) on FIELD_DEFINITION
+
+directive @federation__provides(fields: federation__FieldSet!) on FIELD_DEFINITION
+
+directive @federation__external(reason: String) on OBJECT | FIELD_DEFINITION
+
+directive @federation__tag(name: String!) repeatable on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUMENT_DEFINITION | SCALAR | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION
+
+directive @federation__extends on OBJECT | INTERFACE
+
+directive @shareable on OBJECT | FIELD_DEFINITION
+
+directive @federation__inaccessible on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUMENT_DEFINITION | SCALAR | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION
+
+directive @federation__override(from: String!) on FIELD_DEFINITION
+
+type Consumer
+  @key(fields: "id")
+{
+  id: ID!
+  entitlements: [Entitlement!]!
+}
+
+scalar Date
+
+type Query {
+  getEntitlement(id: ID!): Entitlement
+  getEntitlements(filter: GetEntitlementsFilter): [Entitlement!]!
+  getMembershipPlanByID(id: ID!): MembershipPlan
+  _entities(representations: [_Any!]!): [_Entity]!
+  _service: _Service!
+}
+
+type Mutation {
+  createEntitlement(entitlementInput: EntitlementInput!): Entitlement
+  updateEntitlement(id: ID!, entitlementInput: EntitlementInput!): Entitlement
+  redeemEntitlement(id: ID!, redeemedProduct: EntitlementProductType!): Entitlement
+  deleteEntitlement(id: ID!): Boolean
+  createMembershipPlan(membershipPlanInput: MembershipPlanInput!): MembershipPlan
+}
+
+type Entitlement
+  @key(fields: "id")
+{
+  id: ID!
+  createdAt: Date! @shareable
+  updatedAt: Date! @shareable
+  consumer: Consumer
+  issueDate: Date!
+  expiryDate: Date!
+  expired: Boolean!
+  redeemed: Boolean!
+  redeemableProducts: [EntitlementProductType]!
+  redemptionDate: Date
+  redeemedProduct: EntitlementProductType
+}
+
+input EntitlementInput {
+  consumerID: String!
+  externalID: String!
+  issueDate: Date
+  expiryDate: Date!
+  redeemed: Boolean
+  redeemableProducts: [EntitlementProductType]!
+  redemptionDate: Date
+  redeemedProduct: EntitlementProductType
+}
+
+enum EntitlementProductType {
+  LOUNGE
+}
+
+input GetEntitlementsFilter {
+  consumerID: String
+  expired: Boolean
+  redeemed: Boolean
+  redeemableProducts: EntitlementProductType
+  redeemedProduct: EntitlementProductType
+}
+
+type MembershipPlan
+  @key(fields: "id")
+{
+  id: ID!
+  dealName: String
+  description: String
+  externalID: String
+  createdAt: Date! @shareable
+  updatedAt: Date! @shareable
+  startDate: Date!
+  endDate: Date!
+}
+
+input MembershipPlanInput {
+  externalID: String
+  dealName: String
+  description: String
+  startDate: Date!
+  endDate: Date!
+}
+
+enum link__Purpose {
+  """
+  `SECURITY` features provide metadata necessary to securely resolve fields.
+  """
+  SECURITY
+
+  """
+  `EXECUTION` features provide metadata necessary for operation execution.
+  """
+  EXECUTION
+}
+
+scalar link__Import
+
+scalar federation__FieldSet
+
+scalar _Any
+
+type _Service {
+  sdl: String
+}
+
+union _Entity = Consumer | Entitlement | MembershipPlan

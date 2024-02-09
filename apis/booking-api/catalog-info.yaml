@@ -23,5 +23,4 @@ spec:
   owner: booking-team
   system: backend
   definition:
-    $text: https://github.com/backstage-cg/backend-apps/blob/main/booking-api-schema
-  subComponentOf: [gateway-api]
+    $text: https://github.com/backstage-cg/backend-apps/blob/main/schemas/booking-api.graphql

@@ -1,0 +1,184 @@
+extend schema
+  @link(url: "https://specs.apollo.dev/link/v1.0")
+  @link(url: "https://specs.apollo.dev/federation/v2.0", import: ["@key", "@shareable"])
+{
+  query: Query
+  mutation: Mutation
+}
+
+directive @link(url: String, as: String, for: link__Purpose, import: [link__Import]) repeatable on SCHEMA
+
+directive @key(fields: federation__FieldSet!, resolvable: Boolean = true) repeatable on OBJECT | INTERFACE
+
+directive @federation__requires(fields: federation__FieldSet!) on FIELD_DEFINITION
+
+directive @federation__provides(fields: federation__FieldSet!) on FIELD_DEFINITION
+
+directive @federation__external(reason: String) on OBJECT | FIELD_DEFINITION
+
+directive @federation__tag(name: String!) repeatable on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUMENT_DEFINITION | SCALAR | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION
+
+directive @federation__extends on OBJECT | INTERFACE
+
+directive @shareable on OBJECT | FIELD_DEFINITION
+
+directive @federation__inaccessible on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUMENT_DEFINITION | SCALAR | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION
+
+directive @federation__override(from: String!) on FIELD_DEFINITION
+
+type Query {
+  getConsumer: Consumer
+  getConsumerByID(id: ID!): Consumer
+  getConsumerByEmailAddress(emailAddress: String!): Consumer
+  getMobileAppDataByAppId(appId: ID!): MobileAppData
+  _entities(representations: [_Any!]!): [_Entity]!
+  _service: _Service!
+}
+
+type Mutation {
+  """
+  This is used to generate a consumer, but if they are already created we will return their details
+  """
+  findOrCreateConsumer(consumerInput: ConsumerInput): Consumer
+
+  """Change or update the consumer record with additional information"""
+  updateConsumer(consumerInput: ConsumerInput): Consumer
+
+  """
+  Link the currently logged in cergea consumer account to an existing Collinson account
+  """
+  linkAccount(linkedAccountInput: LinkedAccountInput): LinkedAccount
+
+  """
+  Create a mobile app data record for a new app instance against consumer
+  """
+  findOrCreateMobileAppData(mobileAppDataInput: MobileAppDataInput): MobileAppData
+
+  """Update mobile app data record with additional information"""
+  updateMobileAppData(mobileAppDataInput: MobileAppDataInput): MobileAppData
+}
+
+"""
+A consumer is the end user of our applications that consume our goods and services
+"""
+type Consumer
+  @key(fields: "id")
+{
+  id: ID!
+  fullName: String
+  firstName: String
+  lastName: String
+
+  """Consumers preferred langauge"""
+  locale: String
+  dateOfBirth: Date
+
+  """Current a mandatory field as we use email as our primary login method"""
+  emailAddress: String!
+  phone: String
+
+  """
+  In salesforce we have a record of our consumer to manage their lifecycle and manage marketing
+  """
+  crmId: String
+  linkedAccounts: [LinkedAccount!]!
+  mobileAppsData: [MobileAppData]
+  createdAt: Date! @shareable
+  updatedAt: Date! @shareable
+}
+
+input ConsumerInput {
+  emailAddress: String!
+  firstName: String
+  lastName: String
+  locale: String
+  phone: String
+  dateOfBirth: Date
+  marketingConsent: Boolean
+}
+
+scalar Date
+
+enum LinkedAccountProvider {
+  PRIORITY_PASS
+  LOUNGE_KEY
+}
+
+input LinkedAccountInput {
+  token: String!
+  analytics: JSONObject
+}
+
+"""
+A linked account is another account (typically external) that can be associated to the internal cergea consumer
+"""
+type LinkedAccount
+  @key(fields: "id")
+{
+  id: ID!
+  externalID: String!
+  consumer: Consumer!
+  provider: LinkedAccountProvider!
+  membershipID: String
+  membershipType: String!
+  analytics: JSONObject
+  createdAt: Date! @shareable
+  updatedAt: Date! @shareable
+}
+
+scalar JSONObject
+
+input MobileAppDataInput {
+  appId: String!
+  pushNotificationId: String
+  os: String
+  osVersion: String
+  deviceMaker: String
+  deviceModel: String
+  appVersion: String
+  appName: String
+}
+
+"""
+Mobile app data stores data about an instance of mobile app used by consumer. A consumer can have multiple app instances.
+"""
+type MobileAppData
+  @key(fields: "id")
+{
+  id: ID!
+  appId: String!
+  consumer: Consumer!
+  pushNotificationId: String
+  os: String!
+  osVersion: String
+  deviceMaker: String
+  deviceModel: String
+  appVersion: String!
+  appName: String!
+  createdAt: Date! @shareable
+  updatedAt: Date! @shareable
+}
+
+enum link__Purpose {
+  """
+  `SECURITY` features provide metadata necessary to securely resolve fields.
+  """
+  SECURITY
+
+  """
+  `EXECUTION` features provide metadata necessary for operation execution.
+  """
+  EXECUTION
+}
+
+scalar link__Import
+
+scalar federation__FieldSet
+
+scalar _Any
+
+type _Service {
+  sdl: String
+}
+
+union _Entity = Consumer | LinkedAccount | MobileAppData

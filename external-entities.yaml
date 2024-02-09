@@ -22,4 +22,3 @@ spec:
   system: backend
   definition:
     $text: https://github.com/backstage-cg/backend-apps/blob/main/booking-api-schema
-  subComponentOf: [gateway-api]

@@ -1,0 +1,186 @@
+extend schema
+  @link(url: "https://specs.apollo.dev/link/v1.0")
+  @link(url: "https://specs.apollo.dev/federation/v2.0", import: ["@key", "@shareable"])
+{
+  query: Query
+}
+
+directive @link(url: String, as: String, for: link__Purpose, import: [link__Import]) repeatable on SCHEMA
+
+directive @key(fields: federation__FieldSet!, resolvable: Boolean = true) repeatable on OBJECT | INTERFACE
+
+directive @federation__requires(fields: federation__FieldSet!) on FIELD_DEFINITION
+
+directive @federation__provides(fields: federation__FieldSet!) on FIELD_DEFINITION
+
+directive @federation__external(reason: String) on OBJECT | FIELD_DEFINITION
+
+directive @federation__tag(name: String!) repeatable on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUMENT_DEFINITION | SCALAR | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION
+
+directive @federation__extends on OBJECT | INTERFACE
+
+directive @shareable on OBJECT | FIELD_DEFINITION
+
+directive @federation__inaccessible on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUMENT_DEFINITION | SCALAR | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION
+
+directive @federation__override(from: String!) on FIELD_DEFINITION
+
+type Query {
+  searchExperiences(query: String, geoLocation: GeoQueryInput, searchFilter: SearchFilterInput): [Experience]
+  getExperienceByID(id: String): Experience
+  _entities(representations: [_Any!]!): [_Entity]!
+  _service: _Service!
+}
+
+type Experience
+  @key(fields: "id")
+{
+  id: ID!
+  experience: ExperienceCategory
+  loungeCode: String
+  accessPeriod: String
+  msDynamicsUID: String
+  serviceCentre: String
+  loungeName: String
+  location: LegacyLocation
+  pricing: LegacyPricing
+  ppboOperatorName: String
+  passengerType: String
+  airsideLandside: String
+  underNotice: Boolean
+  exitDateIfUnderNotice: Date
+  reservationRequestEmail: String
+  hasActiveLounges: Boolean
+  isDeleted: Boolean
+  facilities: [String]
+  videos: [String]
+  images: [Image]
+  additionalInformation: String
+  conditions: String
+  directions: String
+  openingHours: String
+  marketingCopy: String
+  uniqueValueKey: String
+  redemption: Redemption
+  loungeOffers: [String]
+  walkUpStripeProductID: String
+  reservationStripeProductID: String
+  reservationOnlyFeeStripeProductID: String
+  partnerIntegrationId: String
+  partnerIdTest: String
+  partnerIdProd: String
+  pP: Boolean
+  lK: Boolean
+  cergea: Boolean
+}
+
+enum ExperienceCategory {
+  AIRPORT_EXPERIENCE
+}
+
+enum ExperienceType {
+  LOUNGE
+}
+
+type Image
+  @key(fields: "id")
+{
+  id: ID!
+  url: String
+  altText: String
+  width: Int
+  height: Int
+  contentType: String
+  lastModified: Date
+}
+
+type Operator
+  @key(fields: "id")
+{
+  id: ID!
+  name: String
+  experiences: [Experience]
+}
+
+scalar Date
+
+scalar ObjectID
+
+type Geoloc {
+  lng: Float
+  lat: Float
+}
+
+input GeoQueryInput {
+  lng: Float
+  lat: Float
+}
+
+type LegacyLocation {
+  airportCode: String
+  airportName: String
+  terminal: String
+  city: String
+  country: String
+  region: String
+  lbCountryCode: String
+  isoCountryCode: String
+  terminalAccessibility: String
+  terminalCode: String
+  cgTerminalCode: String
+  cgTerminal: String
+  _geoloc: Geoloc
+  timezone: String
+}
+
+type LegacyPricing {
+  pricingType: String
+  currency: String
+  reservationCost: Float
+  lifestyleXReservationCharge: Float
+  walkInCostCurrentPPRate: Float
+  lifestyleXWalkInCharge: Float
+  vat: Int
+  reservationOnlyFee: Float
+  reservationOnlyFeeCost: Float
+}
+
+type Redemption {
+  defaultRedemptionTypeCode: String
+  defaultMaxGuests: Int
+  isGuestAllowed: Boolean
+}
+
+type SearchFilter {
+  attribute: String
+  value: String
+}
+
+input SearchFilterInput {
+  attribute: String
+  value: String
+}
+
+enum link__Purpose {
+  """
+  `SECURITY` features provide metadata necessary to securely resolve fields.
+  """
+  SECURITY
+
+  """
+  `EXECUTION` features provide metadata necessary for operation execution.
+  """
+  EXECUTION
+}
+
+scalar link__Import
+
+scalar federation__FieldSet
+
+scalar _Any
+
+type _Service {
+  sdl: String
+}
+
+union _Entity = Experience | Image | Operator

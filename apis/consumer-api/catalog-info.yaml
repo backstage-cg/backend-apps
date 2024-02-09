@@ -23,5 +23,4 @@ spec:
   owner: consumer-team
   system: backend
   definition:
-    $text: https://github.com/backstage-cg/backend-apps/blob/main/gateway-api-schema
-  subComponentOf: [consumer-api]
+    $text: https://github.com/backstage-cg/backend-apps/blob/main/schemas/consumer-api.graphql

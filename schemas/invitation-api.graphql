@@ -1,0 +1,113 @@
+extend schema
+  @link(url: "https://specs.apollo.dev/link/v1.0")
+  @link(url: "https://specs.apollo.dev/federation/v2.0", import: ["@key", "@shareable"])
+{
+  query: Query
+  mutation: Mutation
+}
+
+directive @link(url: String, as: String, for: link__Purpose, import: [link__Import]) repeatable on SCHEMA
+
+directive @key(fields: federation__FieldSet!, resolvable: Boolean = true) repeatable on OBJECT | INTERFACE
+
+directive @federation__requires(fields: federation__FieldSet!) on FIELD_DEFINITION
+
+directive @federation__provides(fields: federation__FieldSet!) on FIELD_DEFINITION
+
+directive @federation__external(reason: String) on OBJECT | FIELD_DEFINITION
+
+directive @federation__tag(name: String!) repeatable on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUMENT_DEFINITION | SCALAR | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION
+
+directive @federation__extends on OBJECT | INTERFACE
+
+directive @shareable on OBJECT | FIELD_DEFINITION
+
+directive @federation__inaccessible on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUMENT_DEFINITION | SCALAR | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION
+
+directive @federation__override(from: String!) on FIELD_DEFINITION
+
+type Query {
+  getInvitations(experienceID: ID): [Invitation!]!
+  getInvitationByID(id: ID!): Invitation
+  isInvitationTokenValid(inviteToken: String!): Boolean
+  _entities(representations: [_Any!]!): [_Entity]!
+  _service: _Service!
+}
+
+type Mutation {
+  createInvitation(invitationInput: InvitationInput): Invitation
+  acceptInvitation(acceptInvitationInput: AcceptInvitationInput!): Invitation
+  cancelInvitation(id: ID!): Invitation
+}
+
+"""
+This allows us to send invitations for access, currently creating a partner account and linking it to an experience
+"""
+type Invitation
+  @key(fields: "id")
+{
+  id: ID!
+  experience: Experience
+  inviteeEmail: String!
+  expiresAt: Date!
+  createdAt: Date! @shareable
+  updatedAt: Date! @shareable
+}
+
+input InvitationInput {
+  inviteeEmail: String!
+  userType: InvitationUserType!
+  experience: ExperienceKey
+}
+
+"""The types of user invitation that can be sent"""
+enum InvitationUserType {
+  """An operator who can see the details for a single experience"""
+  PARTNER
+
+  """An admin user that has access to all experiences and full permissions"""
+  SUPER_USER
+}
+
+type Experience
+  @key(fields: "id")
+{
+  id: ID!
+  invitations: [Invitation!]!
+}
+
+input ExperienceKey {
+  id: ID!
+}
+
+scalar Date
+
+input AcceptInvitationInput {
+  email: String!
+  password: String!
+  inviteToken: String!
+}
+
+enum link__Purpose {
+  """
+  `SECURITY` features provide metadata necessary to securely resolve fields.
+  """
+  SECURITY
+
+  """
+  `EXECUTION` features provide metadata necessary for operation execution.
+  """
+  EXECUTION
+}
+
+scalar link__Import
+
+scalar federation__FieldSet
+
+scalar _Any
+
+type _Service {
+  sdl: String
+}
+
+union _Entity = Experience | Invitation

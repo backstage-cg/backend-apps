@@ -1,0 +1,1024 @@
+extend schema
+  @link(url: "https://specs.apollo.dev/link/v1.0")
+  @link(url: "https://specs.apollo.dev/federation/v2.0", import: ["@key", "@shareable"])
+{
+  query: Query
+  mutation: Mutation
+}
+
+directive @link(url: String, as: String, for: link__Purpose, import: [link__Import]) repeatable on SCHEMA
+
+directive @key(fields: federation__FieldSet!, resolvable: Boolean = true) repeatable on OBJECT | INTERFACE
+
+directive @federation__requires(fields: federation__FieldSet!) on FIELD_DEFINITION
+
+directive @federation__provides(fields: federation__FieldSet!) on FIELD_DEFINITION
+
+directive @federation__external(reason: String) on OBJECT | FIELD_DEFINITION
+
+directive @federation__tag(name: String!) repeatable on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUMENT_DEFINITION | SCALAR | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION
+
+directive @federation__extends on OBJECT | INTERFACE
+
+directive @shareable on OBJECT | FIELD_DEFINITION
+
+directive @federation__inaccessible on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUMENT_DEFINITION | SCALAR | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION
+
+directive @federation__override(from: String!) on FIELD_DEFINITION
+
+type DaySchedules {
+  FRIDAY: [Schedule]
+  MONDAY: [Schedule]
+  SATURDAY: [Schedule]
+  SUNDAY: [Schedule]
+  THURSDAY: [Schedule]
+  TUESDAY: [Schedule]
+  WEDNESDAY: [Schedule]
+}
+
+input DaySchedulesInput {
+  FRIDAY: [ScheduleInput]
+  MONDAY: [ScheduleInput]
+  SATURDAY: [ScheduleInput]
+  SUNDAY: [ScheduleInput]
+  THURSDAY: [ScheduleInput]
+  TUESDAY: [ScheduleInput]
+  WEDNESDAY: [ScheduleInput]
+}
+
+type GeoJSON {
+  type: String!
+  coordinates: [[[Float!]!]!]!
+}
+
+input GeoJSONInput {
+  type: String!
+  coordinates: [[[Float!]!]!]!
+}
+
+enum ISOCountryCode {
+  ABW
+  AFG
+  AGO
+  AIA
+  ALA
+  ALB
+  AND
+  ANT
+  ARE
+  ARG
+  ARM
+  ASM
+  ATA
+  ATF
+  ATG
+  AUS
+  AUT
+  AZE
+  BDI
+  BEL
+  BEN
+  BES
+  BFA
+  BGD
+  BGR
+  BHR
+  BHS
+  BIH
+  BLM
+  BLR
+  BLZ
+  BMU
+  BOL
+  BRA
+  BRB
+  BRN
+  BTN
+  BVT
+  BWA
+  CAF
+  CAN
+  CCK
+  CHE
+  CHL
+  CHN
+  CIV
+  CMR
+  COD
+  COG
+  COK
+  COL
+  COM
+  CPV
+  CRI
+  CUB
+  CUW
+  CXR
+  CYM
+  CYP
+  CZE
+  DEU
+  DJI
+  DMA
+  DNK
+  DOM
+  DZA
+  ECU
+  EGY
+  ERI
+  ESH
+  ESP
+  EST
+  ETH
+  FIN
+  FJI
+  FLK
+  FRA
+  FRO
+  FSM
+  GAB
+  GBR
+  GEO
+  GGY
+  GHA
+  GIB
+  GIN
+  GLP
+  GMB
+  GNB
+  GNQ
+  GRC
+  GRD
+  GRL
+  GTM
+  GUF
+  GUM
+  GUY
+  HKG
+  HMD
+  HND
+  HRV
+  HTI
+  HUN
+  IDN
+  IMN
+  IND
+  IOT
+  IRL
+  IRN
+  IRQ
+  ISL
+  ISR
+  ITA
+  JAM
+  JEY
+  JOR
+  JPN
+  KAZ
+  KEN
+  KGZ
+  KHM
+  KIR
+  KNA
+  KOR
+  KWT
+  LAO
+  LBN
+  LBR
+  LBY
+  LCA
+  LIE
+  LKA
+  LSO
+  LTU
+  LUX
+  LVA
+  MAC
+  MAF
+  MAR
+  MCO
+  MDA
+  MDG
+  MDV
+  MEX
+  MHL
+  MKD
+  MLI
+  MLT
+  MMR
+  MNE
+  MNG
+  MNP
+  MOZ
+  MRT
+  MSR
+  MTQ
+  MUS
+  MWI
+  MYS
+  MYT
+  NAM
+  NCL
+  NER
+  NFK
+  NGA
+  NIC
+  NIU
+  NLD
+  NOR
+  NPL
+  NRU
+  NZL
+  OMN
+  PAK
+  PAN
+  PCN
+  PER
+  PHL
+  PLW
+  PNG
+  POL
+  PRI
+  PRK
+  PRT
+  PRY
+  PSE
+  PYF
+  QAT
+  REU
+  ROU
+  RUS
+  RWA
+  SAU
+  SDN
+  SEN
+  SGP
+  SGS
+  SHN
+  SJM
+  SLE
+  SLB
+  SLV
+  SMR
+  SOM
+  SPM
+  SRB
+  SSD
+  STP
+  SUR
+  SVK
+  SVN
+  SWE
+  SWZ
+  SXM
+  SYC
+  SYR
+  TCA
+  TCD
+  TGO
+  THA
+  TJK
+  TKL
+  TKM
+  TLS
+  TON
+  TTO
+  TUN
+  TUR
+  TUV
+  TWN
+  TZA
+  UGA
+  UKR
+  UMI
+  URY
+  USA
+  UZB
+  VAT
+  VCT
+  VEN
+  VGB
+  VIR
+  VNM
+  VUT
+  WLF
+  WSM
+  YEM
+  ZAF
+  ZMB
+  ZWE
+}
+
+type Location {
+  """The country name"""
+  country: String!
+
+  """The ISO country code"""
+  isoCountryCode: ISOCountryCode
+
+  """The city"""
+  city: String
+
+  """The 3 character location code eg RMF"""
+  code: String
+
+  """Whether the location is airside or landside"""
+  landside: Boolean
+
+  """The name of the location"""
+  name: String
+
+  """The terminal of the location"""
+  terminal: String
+
+  """
+  An open standard file format used for representing geographical features and their attributes
+  """
+  geoJSON: GeoJSON
+
+  """Metadata about editor and last edited"""
+  meta: Meta
+}
+
+input LocationInput {
+  """The country name"""
+  country: String!
+
+  """The ISO country code"""
+  isoCountryCode: ISOCountryCode
+
+  """The city"""
+  city: String
+
+  """The 3 character location code eg RMF"""
+  code: String
+
+  """Whether the location is airside or landside"""
+  landside: Boolean
+
+  """The name of the location"""
+  name: String
+
+  """The terminal of the location"""
+  terminal: String
+
+  """
+  An open standard file format used for representing geographical features and their attributes
+  """
+  geoJSON: GeoJSONInput
+
+  """Metadata about editor and last edited"""
+  meta: MetaInput
+}
+
+type OpeningTimes {
+  """
+  The opening times expection text. This will be deprecated in favour of variations
+  """
+  exceptions: String
+
+  """Metadata about editor and last edited"""
+  meta: Meta
+
+  """The standard opening time schedules"""
+  schedules: DaySchedules
+
+  """The variations to the standard opening times"""
+  variations: [Variation]
+}
+
+input OpeningTimesInput {
+  """
+  The opening times expection text. This will be deprecated in favour of variations
+  """
+  exceptions: String
+
+  """Metadata about editor and last edited"""
+  meta: MetaInput
+
+  """The standard opening time schedules"""
+  schedules: DaySchedulesInput
+
+  """The variations to the standard opening times"""
+  variations: [VariationInput]
+}
+
+type Outlet
+  @key(fields: "id")
+{
+  id: ID!
+
+  """A list of ancillary products available at the outlet"""
+  ancillaryProducts: [AncillaryProduct]!
+
+  """The code of the outlet"""
+  code: String
+
+  """The name of the outlet"""
+  name: String!
+
+  """The legacy code of the outlet (Lounge Code) eg LHR13"""
+  legacyCode: String
+
+  """Whether the outlet has disabled access"""
+  hasDisabledAccess: Boolean!
+
+  """The category of outlet eg AIRPORT, FERRY_STATION, RAILWAY_STATION"""
+  category: OutletCategory!
+
+  """The email address for reservations"""
+  reservationEmail: String
+
+  """The Salesforce ID of the outlet"""
+  salesforceID: String!
+
+  """The status of the outlet"""
+  status: Status!
+
+  """
+  Categories of the products associated with the outlet. These are used for filtering
+  """
+  productCategories: [ProductCategory]!
+
+  """The tier of the outlet for example Gold or Black"""
+  tier: Tier
+
+  """The location of the outlet"""
+  location: Location!
+
+  """Metadata about editor and last edited"""
+  meta: Meta
+
+  """The opening times of the outlet"""
+  openingTimes: OpeningTimes
+
+  """The partner brand of the outlet"""
+  partnerBrand: PartnerBrand!
+
+  """A list of products available at the outlet"""
+  products: [Product]!
+
+  """The content data from Contentful"""
+  content: OutletContent
+
+  """Object containing outlet tags (tier, isoCountryCode, category)"""
+  tags: OutletTags
+}
+
+input OutletAndProductFilters {
+  outlet: OutletFilters
+  product: ProductFilters
+}
+
+enum OutletCategory {
+  AIRPORT
+  FERRY_STATION
+  RAILWAY_STATION
+}
+
+type OutletContent
+  @key(fields: "sys { id locale }", resolvable: true)
+{
+  sys: Sys!
+}
+
+input OutletFilters {
+  category: [OutletCategory]
+  tier: [Tier]
+  isoCountryCode: [ISOCountryCode]
+  region: [OutletRegion]
+}
+
+input OutletInput {
+  """The name of the outlet"""
+  name: String!
+
+  """The legacy code of the outlet (Lounge Code) eg LHR13"""
+  legacyCode: String
+
+  """Whether the outlet has disabled access"""
+  hasDisabledAccess: Boolean!
+
+  """The category of outlet eg AIRPORT, FERRY_STATION, RAILWAY_STATION"""
+  category: OutletCategory!
+
+  """The email address for reservations"""
+  reservationEmail: String
+
+  """The Salesforce ID of the outlet"""
+  salesforceID: String!
+
+  """The status of the outlet"""
+  status: Status!
+
+  """
+  Categories of the products associated with the outlet. These are used for filtering
+  """
+  productCategories: [ProductCategory]!
+
+  """The tier of the outlet for example Gold or Black"""
+  tier: Tier
+
+  """The location of the outlet"""
+  location: LocationInput!
+
+  """Metadata about editor and last edited"""
+  meta: MetaInput
+
+  """The opening times of the outlet"""
+  openingTimes: OpeningTimesInput
+
+  """The partner brand of the outlet"""
+  partnerBrand: PartnerBrandKey!
+}
+
+input OutletKey {
+  id: ID!
+}
+
+enum OutletRegion {
+  APAC
+  AMERICAS
+  EMEA
+  GLOBAL
+}
+
+type OutletTags {
+  category: OutletCategory
+  tier: Tier
+  isoCountryCode: ISOCountryCode
+  region: OutletRegion
+}
+
+type OutletTagsList {
+  category: [OutletCategory]
+  tier: [Tier]
+  isoCountryCode: [ISOCountryCode]
+  region: [OutletRegion]
+}
+
+type PaginatedOutlets {
+  items: [Outlet]
+  pageInfo: PageInfo
+  totalItemCount: Int
+}
+
+type Schedule {
+  """The start time of the schedule"""
+  startTime: String!
+
+  """The end time of the schedule"""
+  endTime: String!
+}
+
+input ScheduleInput {
+  """The start time of the schedule"""
+  startTime: String!
+
+  """The end time of the schedule"""
+  endTime: String!
+}
+
+type Variation {
+  type: VariationType!
+  date: String!
+}
+
+input VariationInput {
+  type: VariationType!
+  date: String!
+}
+
+enum VariationType {
+  ANNUAL
+  DATE_SPECIFIC
+}
+
+type PartnerBrand
+  @key(fields: "id")
+{
+  id: ID!
+  outlets: [Outlet]!
+  content: PartnerBrandContent
+
+  """The name of the partner brand"""
+  name: String!
+
+  """The salesforce ID of the partner brand"""
+  salesforceID: String!
+}
+
+type PartnerBrandContent
+  @key(fields: "sys { id locale }", resolvable: true)
+{
+  sys: Sys!
+}
+
+input PartnerBrandInput {
+  """The name of the partner brand"""
+  name: String!
+
+  """The salesforce ID of the partner brand"""
+  salesforceID: String!
+}
+
+input PartnerBrandKey {
+  id: ID!
+}
+
+type AffiliateProduct
+  @key(fields: "id")
+{
+  id: ID!
+
+  """The product name"""
+  name: String!
+
+  """Urls for Affiliate Products"""
+  urls: [AffiliateUrls]!
+}
+
+input AffiliateProductInput {
+  name: String!
+  urls: [AffiliateUrlsInput]!
+  type: CatalogueProductType!
+}
+
+input AffiliateUrlsInput {
+  url: String!
+  programme: Programme!
+}
+
+type AffiliateUrls {
+  url: String!
+  programme: Programme!
+}
+
+type AncillaryProduct
+  @key(fields: "id")
+{
+  id: ID!
+
+  """The product name"""
+  name: String!
+
+  """The outlet associated with the product"""
+  outlet: Outlet
+
+  """The Stripe ID of the product"""
+  ppStripeID: String
+
+  """The relevant Salesforce ID of the product"""
+  salesforceID: String!
+
+  """The product tier for example Gold or Black"""
+  tier: String
+
+  """A list of costs for the product by programme"""
+  costs: [ProductCost]!
+
+  """A list of sale prices for the product by programme"""
+  salePrices: [ProductSalePrice]!
+
+  """The status of the product"""
+  status: Status!
+}
+
+enum CatalogueProductType {
+  PRIMARY
+  ANCILLARY
+  AFFILIATE
+}
+
+enum PrimaryProductAccessType {
+  RESERVATION
+  RESERVATION_FEE_ONLY
+  WALK_UP
+}
+
+type Product
+  @key(fields: "id")
+{
+  id: ID!
+
+  """The access type of the product"""
+  accessType: PrimaryProductAccessType!
+
+  """The product name generated from the accessType"""
+  name: String!
+
+  """The product category"""
+  category: ProductCategory!
+
+  """The Stripe ID of the product"""
+  ppStripeID: String
+
+  """The relevant Salesforce ID of the product"""
+  salesforceID: String!
+
+  """The stage of the product"""
+  stage: ProductStage!
+
+  """The status of the product"""
+  status: Status!
+
+  """The product tier for example Gold or Black"""
+  tier: Tier
+
+  """The outlet associated with the product"""
+  outlet: Outlet
+
+  """A list of costs for the product by programme"""
+  costs: [ProductCost]!
+
+  """A list of sale prices for the product by programme"""
+  salePrices: [ProductSalePrice]!
+
+  """Object containing product tags (tier, accessType, category)"""
+  tags: ProductTags
+}
+
+enum ProductCategory {
+  EAT
+  LOUNGE
+  REFRESH
+  REST
+  UNWIND
+}
+
+type ProductCost {
+  """The cost to the partner when pricing type is flat"""
+  cost: Float
+
+  """The currency of the cost eg GBP"""
+  costCurrency: String!
+
+  """
+  The tax percentage to be applied to the cost for example 20% VAT in the UK
+  """
+  defaultTaxPercentage: Int!
+
+  """The programme this cost is for"""
+  programme: Programme!
+
+  """The cost to the partner when pricing type is variable"""
+  projectedCost: Float
+
+  """The cost of a reservation part only"""
+  reservationCost: Float!
+
+  """The cost type either flat or tiered"""
+  type: ProductCostType!
+}
+
+input ProductCostInput {
+  """The cost to the partner when pricing type is flat"""
+  cost: Float
+
+  """The currency of the cost eg GBP"""
+  costCurrency: String!
+
+  """
+  The tax percentage to be applied to the cost for example 20% VAT in the UK
+  """
+  defaultTaxPercentage: Int!
+
+  """The programme this cost is for"""
+  programme: Programme!
+
+  """The cost to the partner when pricing type is variable"""
+  projectedCost: Float
+
+  """The cost of a reservation part only"""
+  reservationCost: Float!
+
+  """The cost type either flat or tiered"""
+  type: ProductCostType!
+}
+
+enum ProductCostType {
+  FLAT
+  TIERED
+}
+
+input ProductFilters {
+  accessType: [PrimaryProductAccessType]
+  category: [ProductCategory]
+  tier: [Tier]
+}
+
+input ProductInput {
+  """The access type of the product"""
+  accessType: PrimaryProductAccessType!
+
+  """The product name generated from the accessType"""
+  name: String!
+
+  """The product category"""
+  category: ProductCategory!
+
+  """The Stripe ID of the product"""
+  ppStripeID: String
+
+  """The relevant Salesforce ID of the product"""
+  salesforceID: String!
+
+  """The stage of the product"""
+  stage: ProductStage!
+
+  """The status of the product"""
+  status: Status!
+
+  """The product tier for example Gold or Black"""
+  tier: Tier
+
+  """The Outlet ID of the product"""
+  outlet: OutletKey!
+
+  """A list of costs for the product by programme"""
+  costs: [ProductCostInput]!
+
+  """A list of sale prices for the product by programme"""
+  salePrices: [ProductSalePriceInput]!
+
+  """Type of the product (PRIMARY or ANCILLARY)"""
+  type: CatalogueProductType
+}
+
+input ProductKey {
+  id: ID!
+}
+
+type ProductSalePrice {
+  """The programme this sale price is for"""
+  programme: Programme!
+
+  """The sale price to the customer"""
+  salePrice: Float!
+
+  """The currency of the sale price eg GBP"""
+  salePriceCurrency: String!
+
+  """The Stripe ID of the price"""
+  stripePriceID: String
+}
+
+input ProductSalePriceInput {
+  """The programme this sale price is for"""
+  programme: Programme!
+
+  """The sale price to the customer"""
+  salePrice: Float!
+
+  """The currency of the sale price eg GBP"""
+  salePriceCurrency: String!
+
+  """The Stripe ID of the price"""
+  stripePriceID: String
+}
+
+enum ProductStage {
+  LIVE
+  CLOSED
+  DECLINED
+  DRAFT
+  ONBOARDING
+}
+
+type ProductTags {
+  accessType: PrimaryProductAccessType
+  category: ProductCategory
+  tier: Tier
+}
+
+type ProductTagsList {
+  accessType: [PrimaryProductAccessType]
+  category: [ProductCategory]
+  tier: [Tier]
+}
+
+enum Programme {
+  LK
+  LP
+  PP
+  MCAE
+}
+
+type Query {
+  getAffiliateProducts: [AffiliateProduct]
+  getPartnerBrandByID(id: ID!): PartnerBrand
+  getPartnerBrandBySalesforceID(salesforceID: String!): PartnerBrand
+  getPartnerBrands(limit: Int): [PartnerBrand]
+  getProductByID(id: ID!): Product
+  getProductBySalesforceID(salesforceID: String!): Product
+  getOutletByID(id: ID!): Outlet
+  getOutletBySalesforceID(salesforceID: String!): Outlet
+  getOutlets(page: Int, pageSize: Int, filters: OutletAndProductFilters): PaginatedOutlets
+  getOutletTags: OutletTagsList
+  getProductTags: ProductTagsList
+  _entities(representations: [_Any!]!): [_Entity]!
+  _service: _Service!
+}
+
+type Mutation {
+  createProduct(productInput: ProductInput): Product
+  updateProduct(id: ID!, productInput: ProductInput): Product
+  deleteProduct(id: ID!): Product
+  createAffiliateProduct(productInput: AffiliateProductInput): AffiliateProduct
+  updateAffiliateProduct(id: ID!, productInput: AffiliateProductInput): AffiliateProduct
+  createOutlet(outletInput: OutletInput): Outlet
+  updateOutlet(id: ID!, outletInput: OutletInput): Outlet
+  deleteOutlet(id: ID!): Outlet
+  addProductCategoryToOutlet(id: ID!, category: ProductCategory!): Outlet
+  createPartnerBrand(partnerBrandInput: PartnerBrandInput): PartnerBrand
+  updatePartnerBrand(id: ID!, partnerBrandInput: PartnerBrandInput): PartnerBrand
+  deletePartnerBrand(id: ID!): PartnerBrand
+}
+
+scalar Date
+
+type Editor {
+  """The editor's first name"""
+  firstName: String
+
+  """The editor's last name"""
+  lastName: String
+
+  """The editor's organisation"""
+  organisation: String
+}
+
+input EditorInput {
+  """The editor's first name"""
+  firstName: String
+
+  """The editor's last name"""
+  lastName: String
+
+  """The editor's organisation"""
+  organisation: String
+}
+
+type Meta {
+  """The editor who last edited the object"""
+  editor: Editor
+
+  """The date the object was last edited"""
+  lastEdited: Date
+}
+
+input MetaInput {
+  """The editor who last edited the object"""
+  editor: EditorInput
+}
+
+type PageInfo {
+  currentPage: Int
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+  totalPages: Int
+}
+
+scalar JSONObject
+
+enum Status {
+  ACTIVE
+  INACTIVE
+  STOP_SALE
+}
+
+type Sys {
+  id: String!
+  locale: String
+}
+
+enum Tier {
+  GOLD
+  BLACK
+  LOW_COST
+  PRIVATE
+}
+
+enum link__Purpose {
+  """
+  `SECURITY` features provide metadata necessary to securely resolve fields.
+  """
+  SECURITY
+
+  """
+  `EXECUTION` features provide metadata necessary for operation execution.
+  """
+  EXECUTION
+}
+
+scalar link__Import
+
+scalar federation__FieldSet
+
+scalar _Any
+
+type _Service {
+  sdl: String
+}
+
+union _Entity = AffiliateProduct | AncillaryProduct | Outlet | OutletContent | PartnerBrand | PartnerBrandContent | Product
