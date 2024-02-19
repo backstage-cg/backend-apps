@@ -5,7 +5,7 @@ kind: System
 metadata:
   name: backend
 spec:
-  owner: backend-apps-team
+  owner: engineering-experience
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Location
@@ -33,7 +33,7 @@ metadata:
 spec:
   type: service
   lifecycle: production
-  owner: backend-apps-team
+  owner: engineering-experience
   system: backend
   providesApis:
     - gateway-api
